@@ -1,3 +1,5 @@
+package clases;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class Administrador extends Usuario {
     //metodos
     public void crearUsuario(){}
     public void realizarBackup(){}
-    public void asignarPermisos(Usuario u,String permiso){}
+    public void asignarPermisos(Usuario u, String permiso){}
 
 
     @Override

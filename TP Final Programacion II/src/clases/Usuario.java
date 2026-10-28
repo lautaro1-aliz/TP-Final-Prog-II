@@ -1,3 +1,5 @@
+package clases;
+
 import java.time.LocalDate;
 
 public abstract class Usuario {
@@ -12,7 +14,7 @@ public abstract class Usuario {
     private LocalDate fechaNacimiento;
 
     //Constructor
-    public Usuario(String DNI, String nombre, String apellido, LocalDate fechaNacimiento,String telefono, String mail, String password) {
+    public Usuario(String DNI, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String mail, String password) {
         this.DNI = DNI;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -21,6 +23,7 @@ public abstract class Usuario {
         this.mail = mail;
         this.password = password;
     }
+
     //Constructor
     public Usuario() {
     }
@@ -75,17 +78,19 @@ public abstract class Usuario {
     }
 
     //Metodos abstractos
-    public boolean iniciarSesion(String correo, String contra){
-        if(correo.equals(getMail()) && contra.equals(getPassword())){
+    public boolean iniciarSesion(String correo, String contra) {
+        if (correo.equals(getMail()) && contra.equals(getPassword())) {
             return true;
         }
         System.out.println("ERROR datos invalidos");
         return false;
     }
-    public boolean cerrarSesion(){
+
+    public boolean cerrarSesion() {
         return true;
     }
-    public void actualizarDatosContacto(String correo,String telefono){
+
+    public void actualizarDatosContacto(String correo, String telefono) {
         this.mail = correo;
         this.telefono = telefono;
         System.out.println("Datos actualizados correctamente");
