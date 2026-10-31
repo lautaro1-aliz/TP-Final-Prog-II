@@ -18,7 +18,7 @@ public class GestorGenerico<T> {
         return elementos.add(elemento);
     }
 
-    
+
     public void eliminar(int indice) {
         T elemento = buscarPorIndice(indice);
         elementos.remove(elemento);
