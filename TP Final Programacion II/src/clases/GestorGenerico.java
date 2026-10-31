@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GestorGenerico<T> {
 
-    private List<T> elementos;
+    protected List<T> elementos;
 
     public GestorGenerico() {
         elementos = new ArrayList<>();

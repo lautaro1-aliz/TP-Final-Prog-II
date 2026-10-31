@@ -8,14 +8,16 @@ public abstract class Habitacion {
     private int capacidad;
     private EstadoHabitacion estado;
     private double precioXnoche;
+    private String tipo;
 
     //Constructor
-    public Habitacion(int capacidad, int id, int piso, double precioXnoche) {
+    public Habitacion(int capacidad, int id, int piso, double precioXnoche,String tipo) {
         this.capacidad = capacidad;
         this.estado = EstadoHabitacion.LIBRE;
         this.id = id;
         this.piso = piso;
         this.precioXnoche = precioXnoche;
+        this.tipo = tipo;
     }
 
     public Habitacion() {
@@ -63,8 +65,16 @@ public abstract class Habitacion {
         this.precioXnoche = precioXnoche;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     //Calcular costo estadia
-    public abstract double calcularCostoEstadi();
+    public abstract double calcularCostoEstadia(int noches);
 
     @Override
     public boolean equals(Object obj) {
