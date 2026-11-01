@@ -1,8 +1,10 @@
 package clases;
 
+import enums.EstadoReserva;
 import interfaces.Identificable;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Reserva implements Identificable {
 
@@ -13,6 +15,7 @@ public class Reserva implements Identificable {
     private LocalDate fechaFin;
     private Habitacion habitacion;
     private Usuario usuario;
+    private EstadoReserva estado;
 
     public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Usuario usuario) {
         this.id = contador++;
@@ -20,6 +23,7 @@ public class Reserva implements Identificable {
         this.fechaFin = fechaFin;
         this.habitacion = habitacion;
         this.usuario = usuario;
+        this.estado = EstadoReserva.PENDIENTE;
     }
 
     public int getId() {
@@ -65,6 +69,14 @@ public class Reserva implements Identificable {
         this.usuario = usuario;
     }
 
+    public EstadoReserva getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoReserva estado) {
+        this.estado = estado;
+    }
+
     @Override
     public boolean coincideCon(String criterio) {
         return String.valueOf(id).equals(criterio);
@@ -73,5 +85,16 @@ public class Reserva implements Identificable {
     public boolean seSuperpone(LocalDate inicio, LocalDate fin) {
         return fechaInicio.isBefore(fin) &&
                 fechaFin.isAfter(inicio);
+    }
+
+    ///Metodo para calcular noches de la estadia en el hotel
+    /// Soy un queso con todo lo relacionado con las fechas asi que aca me ayudo chatgpt jajaja
+    public long calcularNoches() {
+        return ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+    }
+
+    public boolean estaActiva() {
+        return estado == EstadoReserva.PENDIENTE ||
+                estado == EstadoReserva.CONFIRMADA;
     }
 }

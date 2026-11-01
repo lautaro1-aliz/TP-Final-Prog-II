@@ -30,6 +30,13 @@ public class GestorGenerico<T extends Identificable> {
         elementos.remove(indice);
     }
 
+    public boolean eliminar(T elemento) {
+        if (elemento == null) {
+            return false;
+        }
+
+        return elementos.remove(elemento);
+    }
 
     public T buscar(String criterio) {
 
