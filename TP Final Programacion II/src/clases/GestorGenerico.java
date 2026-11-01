@@ -1,9 +1,11 @@
 package clases;
 
+import interfaces.Identificable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestorGenerico<T> {
+public class GestorGenerico<T extends Identificable> {
 
     protected List<T> elementos;
 
@@ -19,9 +21,26 @@ public class GestorGenerico<T> {
     }
 
 
-    public void eliminar(int indice) {
+    /**public void eliminar(int indice) {
         T elemento = buscarPorIndice(indice);
         elementos.remove(elemento);
+    }*/
+
+    public void eliminar(int indice) {
+        elementos.remove(indice);
+    }
+
+
+    public T buscar(String criterio) {
+
+        for (T elemento : elementos) {
+
+            if (elemento.coincideCon(criterio)) {
+                return elemento;
+            }
+        }
+
+        return null;
     }
 
     public T buscarPorIndice(int indice) {

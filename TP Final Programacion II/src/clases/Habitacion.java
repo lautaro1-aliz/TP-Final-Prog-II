@@ -1,7 +1,8 @@
 package clases;
 import enums.EstadoHabitacion;
+import interfaces.Identificable;
 
-public abstract class Habitacion {
+public abstract class Habitacion implements Identificable {
 
     private int id;
     private int piso;
@@ -9,6 +10,7 @@ public abstract class Habitacion {
     private EstadoHabitacion estado;
     private double precioXnoche;
     private String tipo;
+
 
     //Constructor
     public Habitacion(int capacidad, int id, int piso, double precioXnoche,String tipo) {
@@ -86,8 +88,15 @@ public abstract class Habitacion {
         Habitacion otra = (Habitacion) obj;
 
         // ver despues que criterio usamos para considerar igualdad de habitacion
-        return id == otra.id && piso == otra.piso && capacidad == otra.capacidad;
+        return id == otra.id; ///&& piso == otra.piso && capacidad == otra.capacidad;
+    }   // yo pensaba unicamente comparar los ids pensando como si fueran numeros que a su vez estos sean unicos
+
+    @Override
+    public boolean coincideCon(String criterio) {
+        return String.valueOf(id).equals(criterio);
     }
+
+
 
     @Override
     public String toString() {

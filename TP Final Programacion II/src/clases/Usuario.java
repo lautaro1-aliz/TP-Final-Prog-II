@@ -1,8 +1,10 @@
 package clases;
 
+import interfaces.Identificable;
+
 import java.time.LocalDate;
 
-public abstract class Usuario {
+public abstract class Usuario implements Identificable {
 
     //clase abstracta que define atributos de cliente, administrador y empleado
     private String nombre;
@@ -95,6 +97,12 @@ public abstract class Usuario {
         this.telefono = telefono;
         System.out.println("Datos actualizados correctamente");
     }
+
+    @Override
+    public boolean coincideCon(String criterio) {
+        return DNI.equals(criterio);
+    }
+
 
     public abstract void menu();
 }
