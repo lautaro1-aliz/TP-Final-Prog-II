@@ -1,7 +1,10 @@
-package clases;
+package Gestores;
 
-import enums.EstadoHabitacion;
-import enums.EstadoReserva;
+import Entidades.Habitacion;
+import Entidades.Reserva;
+import Entidades.Usuario;
+import Enums.EstadoHabitacion;
+import Enums.EstadoReserva;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,4 +1,6 @@
-package clases;
+package Gestores;
+
+import Entidades.Habitacion;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
-package clases;
+package Entidades;
 
-import enums.EstadoReserva;
-import interfaces.Identificable;
+import Enums.EstadoReserva;
+import Interfaces.Identificable;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -29,6 +29,14 @@ public class Reserva implements Identificable {
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+
+
 
     ///Lo dejo por las dudas pero en la logica no haria falta setearlo ya que seria autoincremental
     /**

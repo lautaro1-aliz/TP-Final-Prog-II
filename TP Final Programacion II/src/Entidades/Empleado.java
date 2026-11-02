@@ -1,6 +1,6 @@
-package clases;
+package Entidades;
 
-import enums.Turno;
+import Enums.Turno;
 
 import java.time.LocalDate;
 
@@ -31,6 +31,10 @@ public class Empleado extends Usuario {
     }
 
 
+    @Override
+    public String rol() {
+        return "Empleado";
+    }
 
     @Override
     public void menu() {

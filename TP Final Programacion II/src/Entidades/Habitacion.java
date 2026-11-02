@@ -1,8 +1,8 @@
-package clases;
-import enums.EstadoHabitacion;
-import interfaces.Identificable;
+package Entidades;
+import Enums.EstadoHabitacion;
+import Interfaces.Identificable;
 
-public abstract class Habitacion implements Identificable {
+public abstract class Habitacion implements Identificable{
 
     private int id;
     private int piso;
@@ -26,6 +26,7 @@ public abstract class Habitacion implements Identificable {
     }
 
     //Getter y Setter
+
 
     public int getId() {
         return id;

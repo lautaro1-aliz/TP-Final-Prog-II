@@ -1,6 +1,6 @@
-package clases;
+package Gestores;
 
-import interfaces.Identificable;
+import Interfaces.Identificable;
 
 import java.util.ArrayList;
 import java.util.List;

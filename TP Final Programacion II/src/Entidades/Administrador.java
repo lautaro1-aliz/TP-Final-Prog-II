@@ -1,4 +1,6 @@
-package clases;
+package Entidades;
+
+import Gestores.MenuAdministrador;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,6 +43,11 @@ public class Administrador extends Usuario {
     public void realizarBackup(){}
     public void asignarPermisos(Usuario u, String permiso){}
 
+
+    @Override
+    public String rol() {
+        return "Administrador";
+    }
 
     @Override
     public void menu() {

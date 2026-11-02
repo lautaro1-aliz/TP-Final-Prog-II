@@ -1,6 +1,6 @@
-package clases;
+package Entidades;
 
-import interfaces.Identificable;
+import Interfaces.Identificable;
 
 import java.time.LocalDate;
 
@@ -104,5 +104,6 @@ public abstract class Usuario implements Identificable {
     }
 
 
+    public abstract String rol();
     public abstract void menu();
 }
