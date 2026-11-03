@@ -11,24 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestionHotel {
-    private GestorGenerico<Habitacion> habitaciones;
-    private GestorGenerico<Usuario> usuarios;
-    private GestorGenerico<Reserva> reservas;
+
+    //el gestor hotel o sistema hotelero deberia gestionar pasajeros, reservas y habitaciones
+    //para que el usuario no interactue directamente con los datos
+    //los gestores que estan dentro de esta clase heredan de Gestor<T> y por ende los metodos CRUD
+    //a parte cada uno deberia implementar metodos propios segun la clase
+    private GestorPasajeros pasajeros;
+    private GestorReservas reservas;
+    private GestorHabitaciones habitaciones;
 
     public GestionHotel() {
-        usuarios = new GestorGenerico<>();
-        habitaciones = new GestorGenerico<>();
-        reservas = new GestorGenerico<>();
-    }
-
-    // GESTIÓN DE HABITACIONES
-
-    public boolean agregarHabitacion(Habitacion habitacion) {
-        return habitaciones.agregar(habitacion);
-    }
-
-    public Habitacion buscarHabitacion(int numero) {
-        return habitaciones.buscar(String.valueOf(numero));
+        pasajeros = new GestorPasajeros();
+        habitaciones = new GestorHabitaciones();
+        reservas = new GestorReservas();
     }
 
     public boolean tieneReservasActivas(int idHabitacion) {
@@ -40,9 +35,10 @@ public class GestionHotel {
         return false;
     }
 
+
     public boolean eliminarHabitacion(int id) {
 
-        Habitacion habitacion = buscarHabitacion(id);
+        Habitacion habitacion = habitaciones.buscarHabitacion(id);
 
         if (habitacion == null || tieneReservasActivas(id)) {
             return false;
@@ -51,10 +47,6 @@ public class GestionHotel {
         return habitaciones.eliminar(habitacion);
     }
 
-
-    public List<Habitacion> listarHabitaciones() {
-        return habitaciones.listar();
-    }
 
 
     public List<Habitacion> listarHabitacionesPorEstado(EstadoHabitacion estado) {
@@ -70,7 +62,7 @@ public class GestionHotel {
     }
 
     public boolean modificarPrecioHabitacion(int id, double nuevoPrecio) {
-        Habitacion habitacion = buscarHabitacion(id);
+        Habitacion habitacion = habitaciones.buscarHabitacion(id);
 
         if (habitacion == null || nuevoPrecio <= 0) {
             return false;
@@ -81,7 +73,7 @@ public class GestionHotel {
     }
 
     public boolean cambiarEstadoHabitacion(int id, EstadoHabitacion estado) {
-        Habitacion habitacion = buscarHabitacion(id);
+        Habitacion habitacion = habitaciones.buscarHabitacion(id);
 
         if (habitacion == null || estado == null) {
             return false;
@@ -92,7 +84,7 @@ public class GestionHotel {
     }
 
     public boolean checkIn(int idHabitacion) {
-        Habitacion habitacion = buscarHabitacion(idHabitacion);
+        Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
 
         if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.LIBRE) {
             return false;
@@ -103,7 +95,7 @@ public class GestionHotel {
     }
 
     public boolean checkOut(int idHabitacion) {
-        Habitacion habitacion = buscarHabitacion(idHabitacion);
+        Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
 
         if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.OCUPADA) {
             return false;
@@ -150,7 +142,7 @@ public class GestionHotel {
 
 
     public Usuario buscarUsuario(String dni) {
-        return usuarios.buscar(dni);
+        return pasajeros.buscar(dni);
     }
 
     // GESTIÓN DE RESERVAS
@@ -190,7 +182,7 @@ public class GestionHotel {
 
     public boolean registrarReserva(int idHabitacion, String dniUsuario, LocalDate fechaInicio, LocalDate fechaFin) {
 
-        Habitacion habitacion = buscarHabitacion(idHabitacion);
+        Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
         Usuario usuario = buscarUsuario(dniUsuario);
 
         if (habitacion == null || usuario == null) {
@@ -285,7 +277,7 @@ public class GestionHotel {
         }
 
         // Buscamos la nueva habitación
-        Habitacion nuevaHabitacion = buscarHabitacion(idNuevaHabitacion);
+        Habitacion nuevaHabitacion = habitaciones.buscarHabitacion(idNuevaHabitacion);
 
         if (nuevaHabitacion == null || nuevaHabitacion.getEstado() != EstadoHabitacion.LIBRE) {
             return false;

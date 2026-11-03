@@ -26,6 +26,23 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         return total;
     }
 
+
+    public Habitacion buscarHabitacion(int numero) {
+      return buscar(String.valueOf(numero));
+   }
+
+    public boolean agregarHabitacion(Habitacion habitacion) {
+        return agregar(habitacion);
+    }
+
+    public List<Habitacion> listarHabitaciones() {
+        return listar();
+    }
+
+
+
+
+
 //    public void guardarEnBD(Habitacion h)  {
 //        dao.insertar(h);
 //    }
