@@ -111,38 +111,4 @@ public class GestorReservas extends GestorGenerico<Reserva> {
         return resultado;
     }
 
-    public boolean modificarReserva(int idReserva, int idNuevaHabitacion, LocalDate nuevaFechaInicio, LocalDate nuevaFechaFin) {
-
-        // Buscamos la reserva original
-        Reserva reserva = buscarReserva(idReserva);
-
-        if (reserva == null || !reserva.estaActiva()) {
-            return false;
-        }
-
-        // Validamos las fechas
-        if (nuevaFechaInicio == null || nuevaFechaFin == null || !nuevaFechaInicio.isBefore(nuevaFechaFin)) {
-            return false;
-        }
-
-        // Buscamos la nueva habitación
-        GestorHabitaciones gh = new GestorHabitaciones();
-        Habitacion nuevaHabitacion = gh.buscarHabitacion(idNuevaHabitacion);
-
-        if (nuevaHabitacion == null || nuevaHabitacion.getEstado() != EstadoHabitacion.LIBRE) {
-            return false;
-        }
-
-        // Comprobamos que no existan reservas superpuestas
-        if (tieneReservaEnPeriodo(nuevaHabitacion, nuevaFechaInicio, nuevaFechaFin, idReserva)) {
-            return false;
-        }
-
-        // Actualizamos los datos
-        reserva.setHabitacion(nuevaHabitacion);
-        reserva.setFechaInicio(nuevaFechaInicio);
-        reserva.setFechaFin(nuevaFechaFin);
-
-        return true;
-    }
 }

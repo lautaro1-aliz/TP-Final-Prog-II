@@ -18,7 +18,7 @@ public class GestorPasajeros extends GestorGenerico<Pasajero>{
         return null;
     }
 
-    public Usuario buscarUsuario(String dni) {
+    public Pasajero buscarUsuario(String dni) {
         return buscar(dni);
     }
 

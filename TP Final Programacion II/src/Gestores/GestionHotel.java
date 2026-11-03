@@ -80,7 +80,7 @@ public class GestionHotel {
 
 
         Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
-        Pasajero pasajero  = (Pasajero) pasajeros.buscarUsuario(dniUsuario);
+        Pasajero pasajero  =  pasajeros.buscarUsuario(dniUsuario);
 
         if (habitacion == null || pasajero == null) {
             return false;
