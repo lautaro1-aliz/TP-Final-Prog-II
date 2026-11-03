@@ -1,12 +1,13 @@
 package Gestores;
 
 import Entidades.Habitacion;
+import Enums.EstadoHabitacion;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorHabitaciones extends GestorGenerico<Habitacion>{
-
 
     public List<Habitacion> listarPorTipo(String tipo) {
         List<Habitacion> resultado = new ArrayList<>();
@@ -37,6 +38,62 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
     public List<Habitacion> listarHabitaciones() {
         return listar();
+    }
+
+    public List<Habitacion> listarHabitacionesPorEstado(EstadoHabitacion estado) {
+        List<Habitacion> resultado = new ArrayList<>();
+
+        for (Habitacion habitacion : listar()) {
+            if (habitacion.getEstado() == estado) {
+                resultado.add(habitacion);
+            }
+        }
+
+        return resultado;
+    }
+
+    public boolean modificarPrecioHabitacion(int id, double nuevoPrecio) {
+        Habitacion habitacion = buscarHabitacion(id);
+
+        if (habitacion == null || nuevoPrecio <= 0) {
+            return false;
+        }
+
+        habitacion.setPrecioXnoche(nuevoPrecio);
+        return true;
+    }
+
+    public boolean cambiarEstadoHabitacion(int id, EstadoHabitacion estado) {
+        Habitacion habitacion = buscarHabitacion(id);
+
+        if (habitacion == null || estado == null) {
+            return false;
+        }
+
+        habitacion.setEstado(estado);
+        return true;
+    }
+
+    public boolean checkIn(int idHabitacion) {
+        Habitacion habitacion = buscarHabitacion(idHabitacion);
+
+        if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.LIBRE) {
+            return false;
+        }
+
+        habitacion.setEstado(EstadoHabitacion.OCUPADA);
+        return true;
+    }
+
+    public boolean checkOut(int idHabitacion) {
+        Habitacion habitacion = buscarHabitacion(idHabitacion);
+
+        if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.OCUPADA) {
+            return false;
+        }
+
+        habitacion.setEstado(EstadoHabitacion.LIBRE);
+        return true;
     }
 
 
