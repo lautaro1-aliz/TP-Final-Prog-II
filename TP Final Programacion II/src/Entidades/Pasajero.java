@@ -13,11 +13,6 @@ public class Pasajero extends Usuario{
     }
 
     @Override
-    public void menu() {
-
-    }
-
-    @Override
     public String rol() {
         return "Pasajero";
     }

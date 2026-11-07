@@ -36,8 +36,5 @@ public class Empleado extends Usuario {
         return "Empleado";
     }
 
-    @Override
-    public void menu() {
 
-    }
 }

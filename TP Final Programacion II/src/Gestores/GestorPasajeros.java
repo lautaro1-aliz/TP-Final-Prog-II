@@ -8,10 +8,9 @@ import java.util.List;
 
 public class GestorPasajeros extends GestorGenerico<Pasajero>{
 
-
     public Pasajero buscarPorDni(String dni) {
         for (Pasajero p : elementos) {
-            if (p.getDNI().equals(dni)) {
+            if (p.getDNI().equalsIgnoreCase(dni)) {
                 return p;
             }
         }

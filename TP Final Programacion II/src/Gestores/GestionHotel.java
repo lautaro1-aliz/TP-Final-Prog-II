@@ -28,13 +28,28 @@ public class GestionHotel {
         reservas = new GestorReservas();
     }
 
+    
+
+    /// TODO habria que agregar logica de GestorEmpelados para poder meterlo dentro de este metodo
+    public void agregarUsuario(Usuario u){
+        if(u instanceof Pasajero){
+            Pasajero p = (Pasajero) u;
+            pasajeros.agregar(p);
+        }
+    }
+
+    public void eliminarUsuario(Usuario u){
+        if(u instanceof Pasajero){
+            Pasajero p = (Pasajero) u;
+            pasajeros.eliminar(p);
+        }
+    }
 
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
     public List<Habitacion> listarHabitacionesDisponibles(
             LocalDate fechaInicio, LocalDate fechaFin, int capacidad) {
 
         List<Habitacion> disponibles = new ArrayList<>();
-
 
         ///TODO Excepcion para implementar mas adelante
         if (fechaInicio == null || fechaFin == null || !fechaInicio.isBefore(fechaFin) || capacidad <= 0) {

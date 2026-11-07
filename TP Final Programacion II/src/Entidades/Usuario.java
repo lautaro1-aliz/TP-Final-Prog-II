@@ -79,6 +79,14 @@ public abstract class Usuario implements Identificable {
         this.password = password;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     //Metodos abstractos
     public boolean iniciarSesion(String correo, String contra) {
         if (correo.equals(getMail()) && contra.equals(getPassword())) {
@@ -105,5 +113,5 @@ public abstract class Usuario implements Identificable {
 
 
     public abstract String rol();
-    public abstract void menu();
+
 }

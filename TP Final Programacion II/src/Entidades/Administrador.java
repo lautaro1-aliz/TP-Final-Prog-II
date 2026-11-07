@@ -1,5 +1,8 @@
 package Entidades;
 
+import Gestores.GestionHotel;
+import Gestores.GestorGenerico;
+import Gestores.GestorHabitaciones;
 import Gestores.MenuAdministrador;
 
 import java.time.LocalDate;
@@ -39,9 +42,30 @@ public class Administrador extends Usuario {
     }
 
     //metodos
-    public void crearUsuario(){}
-    public void realizarBackup(){}
-    public void asignarPermisos(Usuario u, String permiso){}
+    public void crearUsuario(GestionHotel sistema, Usuario user){
+        sistema.agregarUsuario(user);
+    }
+
+     public void eliminarUsuario(GestionHotel sistema, Usuario user){
+        sistema.eliminarUsuario(user);
+     }
+
+
+    public void registrarHabitacion(GestionHotel sistema,Habitacion h){
+       // sistema.registrarHabitacion(h);
+    }
+    public void eliminarHabitacion(GestionHotel sistema, Habitacion h){
+        sistema.eliminarHabitacion(h.getId());
+    }
+
+    public void realizarBackup(){
+        //TODO logica dao
+
+    }
+
+    public void asignarPermisos(Usuario u, String permiso){
+
+    }
 
 
     @Override
@@ -49,9 +73,5 @@ public class Administrador extends Usuario {
         return "Administrador";
     }
 
-    @Override
-    public void menu() {
-        MenuAdministrador m = new MenuAdministrador();
-        m.mostrarMenuAdministrador();
-    }
+
 }
