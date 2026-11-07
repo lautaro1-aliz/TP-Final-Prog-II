@@ -21,14 +21,16 @@ public class GestionHotel {
     private GestorPasajeros pasajeros;
     private GestorReservas reservas;
     private GestorHabitaciones habitaciones;
+    private GestorEmpleados empleados;
 
     public GestionHotel() {
         pasajeros = new GestorPasajeros();
         habitaciones = new GestorHabitaciones();
         reservas = new GestorReservas();
+        empleados = new GestorEmpleados();
     }
 
-    
+
 
     /// TODO habria que agregar logica de GestorEmpelados para poder meterlo dentro de este metodo
     public void agregarUsuario(Usuario u){
@@ -44,6 +46,12 @@ public class GestionHotel {
             pasajeros.eliminar(p);
         }
     }
+
+    public Usuario iniciarSesion(String username,String password) {
+
+        return pasajeros.validarCredenciales(username,password);
+    }
+
 
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
     public List<Habitacion> listarHabitacionesDisponibles(

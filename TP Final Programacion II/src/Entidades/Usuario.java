@@ -1,5 +1,6 @@
 package Entidades;
 
+import Enums.Rol;
 import Interfaces.Identificable;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public abstract class Usuario implements Identificable {
     private String password;
     private String telefono;
     private LocalDate fechaNacimiento;
+    private Rol rol;
 
     //Constructor
     public Usuario(String DNI, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String mail, String password) {
@@ -85,6 +87,14 @@ public abstract class Usuario implements Identificable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     //Metodos abstractos
