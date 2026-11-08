@@ -10,4 +10,18 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
     public void realizarCheckOut(){}
 
     public void administrarHabitaciones(){}
+
+
+    public Empleado buscarPorLegajo(int legajo) {
+
+        for (Empleado e : elementos) {
+
+            if (e.getLegajo() == legajo) {
+                return e;
+            }
+
+        }
+
+        return null;
+    }
 }

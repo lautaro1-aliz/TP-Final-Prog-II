@@ -5,13 +5,17 @@ import Enums.Turno;
 import java.time.LocalDate;
 
 public class Empleado extends Usuario {
+    private static int contador = 1;
     private int legajo;
     private Turno turno;
 
-    public Empleado(String DNI, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String mail, String password, int legajo, Turno turno) {
+    public Empleado(String DNI, String nombre, String apellido, LocalDate fechaNacimiento, String telefono, String mail, String password) {
         super(DNI, nombre, apellido, fechaNacimiento, telefono, mail, password);
-        this.legajo = legajo;
-        this.turno = turno;
+        this.legajo = contador;
+        contador++;
+        this.turno = Turno.MANANA;
+    }
+    public Empleado() {
     }
 
     public int getLegajo() {

@@ -30,7 +30,7 @@ public class MenuPrincipal {
         }else{
             switch(user.getRol()){
                 case ADMINISTRADOR:
-                    MenuAdminstrador.mostrar();
+                    MenuAdminstrador.mostrar(sistema);
                     break;
                 case RECEPCIONISTA:
                     MenuRecepcionista.mostrar();

@@ -1,9 +1,6 @@
 package Gestores;
 
-import Entidades.Habitacion;
-import Entidades.Pasajero;
-import Entidades.Reserva;
-import Entidades.Usuario;
+import Entidades.*;
 import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
 
@@ -37,13 +34,17 @@ public class GestionHotel {
         if(u instanceof Pasajero){
             Pasajero p = (Pasajero) u;
             pasajeros.agregar(p);
+        }else if(u instanceof Empleado){
+            Empleado e = (Empleado) u;
+            empleados.agregar(e);
         }
     }
 
-    public void eliminarUsuario(Usuario u){
-        if(u instanceof Pasajero){
-            Pasajero p = (Pasajero) u;
-            pasajeros.eliminar(p);
+    public void eliminarUsuario(int legajo) {
+
+        Empleado e = empleados.buscarPorLegajo(legajo);
+        if (e != null) {
+            empleados.eliminar(e);
         }
     }
 
