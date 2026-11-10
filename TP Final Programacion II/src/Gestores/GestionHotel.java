@@ -27,9 +27,6 @@ public class GestionHotel {
         empleados = new GestorEmpleados();
     }
 
-
-
-    /// TODO habria que agregar logica de GestorEmpelados para poder meterlo dentro de este metodo
     public void agregarUsuario(Usuario u){
         if(u instanceof Pasajero){
             Pasajero p = (Pasajero) u;
@@ -52,6 +49,12 @@ public class GestionHotel {
 
         return pasajeros.validarCredenciales(username,password);
     }
+
+    public boolean altaHabitacion(Habitacion h){
+
+        return habitaciones.agregarHabitacion(h);
+    }
+
 
 
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva

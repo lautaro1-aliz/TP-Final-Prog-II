@@ -1,7 +1,9 @@
 package Vistas;
 
 import Entidades.Empleado;
+import Entidades.Habitacion;
 import Entidades.Usuario;
+import Enums.EstadoHabitacion;
 import Gestores.GestionHotel;
 
 import java.time.LocalDate;
@@ -34,16 +36,18 @@ public class MenuAdminstrador {
                     sistema.eliminarUsuario(legajo);
                     break;
                 case 3:
-              //      sistema.altaHabitacion();
+                    sistema.altaHabitacion(solicitarDatosHabitacion());
                     break;
                 case 4:
-               //     sistema.eliminarHabitacion();
+                    System.out.println("Ingrese el ID de la habitacion a eliminar: ");
+                    int id = in.nextInt();
+                    sistema.eliminarHabitacion(id);
                     break;
                 case 5:
                 //    sistema.backup();
                     break;
                 case 6:
-            //        sistema.listarHabitacionesDisponibles();
+                //    sistema.listarHabitacionesDisponibles();
                     break;
                 case 7:
                //     sistema;
@@ -87,5 +91,22 @@ public class MenuAdminstrador {
         return new Empleado(dni,nombre,apellido,fechaNacimiento,telefono, mail,password);
     }
 
+    public static Habitacion solicitarDatosHabitacion(){
+        Scanner in = new Scanner(System.in);
 
-}
+        System.out.println("Piso: ");
+        int piso = in.nextInt();
+
+        System.out.print("Capacidad: ");
+        int capacidad = in.nextInt();
+
+        System.out.println("Precio por noche: ");
+        double precio = in.nextDouble();
+
+        System.out.println("Tipo: ");
+        String tipo = in.nextLine();
+
+        return new Habitacion(piso, capacidad, precio, tipo);
+        }
+    }
+

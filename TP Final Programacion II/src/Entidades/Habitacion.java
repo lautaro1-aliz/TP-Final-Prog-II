@@ -2,8 +2,8 @@ package Entidades;
 import Enums.EstadoHabitacion;
 import Interfaces.Identificable;
 
-public abstract class Habitacion implements Identificable{
-
+public class Habitacion implements Identificable{
+    private static int contador = 1;
     private int id;
     private int piso;
     private int capacidad;
@@ -13,16 +13,18 @@ public abstract class Habitacion implements Identificable{
 
 
     //Constructor
-    public Habitacion(int capacidad, int id, int piso, double precioXnoche,String tipo) {
+
+    public Habitacion() {
+    }
+
+    public Habitacion(int piso, int capacidad, double precioXnoche, String tipo) {
         this.capacidad = capacidad;
         this.estado = EstadoHabitacion.LIBRE;
-        this.id = id;
+        this.id = contador;
+        contador++;
         this.piso = piso;
         this.precioXnoche = precioXnoche;
         this.tipo = tipo;
-    }
-
-    public Habitacion() {
     }
 
     //Getter y Setter
@@ -76,8 +78,10 @@ public abstract class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
-    //Calcular costo estadia
-    public abstract double calcularCostoEstadia(int noches);
+    //TODO Calcular costo estadia
+    public double calcularCostoEstadia(int noches){
+        return 0;
+    };
 
     @Override
     public boolean equals(Object obj) {
