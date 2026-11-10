@@ -80,7 +80,10 @@ public class Habitacion implements Identificable{
 
     //TODO Calcular costo estadia
     public double calcularCostoEstadia(int noches){
-        return 0;
+        if(noches <= 0){
+            throw new DatosInvalidosException("La cantidad de noches no puede ser menor que 0 (recibido: " + noches + ")");
+        }
+        return ;
     };
 
     @Override
