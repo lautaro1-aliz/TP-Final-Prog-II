@@ -1,5 +1,6 @@
 package Entidades;
 import Enums.EstadoHabitacion;
+import Excepciones.DatosInvalidosException;
 import Interfaces.Identificable;
 
 public class Habitacion implements Identificable{
@@ -80,8 +81,12 @@ public class Habitacion implements Identificable{
 
 
     public double calcularCostoEstadia(int noches){
-        return precioXnoche*noches;
-    };
+
+        if(noches <= 0){
+            throw new DatosInvalidosException("La cantidad de noches no puede ser menor que 0 (recibido: " + noches + ")");
+        }
+        return noches * getPrecioXnoche();
+    }
 
     @Override
     public boolean equals(Object obj) {
