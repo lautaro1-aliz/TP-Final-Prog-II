@@ -78,9 +78,9 @@ public class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
-    //TODO Calcular costo estadia
+
     public double calcularCostoEstadia(int noches){
-        return 0;
+        return precioXnoche*noches;
     };
 
     @Override

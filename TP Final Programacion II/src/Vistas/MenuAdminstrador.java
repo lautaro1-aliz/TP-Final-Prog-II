@@ -3,10 +3,10 @@ package Vistas;
 import Entidades.Empleado;
 import Entidades.Habitacion;
 import Entidades.Usuario;
-import Enums.EstadoHabitacion;
 import Gestores.GestionHotel;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MenuAdminstrador {
@@ -44,10 +44,23 @@ public class MenuAdminstrador {
                     sistema.eliminarHabitacion(id);
                     break;
                 case 5:
-                //    sistema.backup();
+                    sistema.backup();
                     break;
                 case 6:
-                //    sistema.listarHabitacionesDisponibles();
+                    System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                    String fechaTexto = in.nextLine();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fechaI = LocalDate.parse(fechaTexto, formatter);
+
+                    System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                    fechaTexto = in.nextLine();
+                    formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    LocalDate fechaF = LocalDate.parse(fechaTexto, formatter);
+
+                    System.out.println("Ingrese la capacidad de la habitacion: ");
+                    int cantidad =in.nextInt();
+                    sistema.listarHabitacionesDisponibles(fechaF,fechaF,cantidad);
+
                     break;
                 case 7:
                //     sistema;

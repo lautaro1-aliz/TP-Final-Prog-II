@@ -1,5 +1,6 @@
 package Gestores;
 
+import Entidades.Habitacion;
 import Entidades.Pasajero;
 import Entidades.Usuario;
 import Interfaces.DAO;
@@ -26,9 +27,23 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
         return buscar(dni);
     }
 
-    public Usuario validarCredenciales(String username, String password) {
+    public Pasajero buscarPorCredenciales(String email,String password){
 
-        return dao.login(username, password);
+        return (Pasajero) UsuarioDAO.buscarPorCredenciales(email,password);
     }
 
+    public  void guardarBD(){
+        int guardadas= 0;
+        for(Pasajero p: elementos){
+            guardarEnBD(p);
+            guardadas++;
+        }
+        System.out.println("Habitaciones guardadas: "+guardadas);
+    }
+
+
+
+    public void guardarEnBD(Pasajero p)  {
+        dao.insertar(p);
+    }
 }

@@ -6,6 +6,8 @@ import Entidades.Reserva;
 import Entidades.Usuario;
 import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
+import Interfaces.DAO;
+import dao.ReservaDAO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 
 public class GestorReservas extends GestorGenerico<Reserva> {
 
+    final DAO<Reserva> dao = new ReservaDAO();
     public boolean tieneReservasActivas(int idHabitacion) {
         for (Reserva reserva : listar()) {
             if (reserva.getHabitacion().getId() == idHabitacion && reserva.estaActiva()) {
@@ -109,6 +112,21 @@ public class GestorReservas extends GestorGenerico<Reserva> {
         }
 
         return resultado;
+    }
+
+    public  void guardarBD(){
+        int guardadas= 0;
+        for(Reserva r: elementos){
+            guardarEnBD(r);
+            guardadas++;
+        }
+        System.out.println("Habitaciones guardadas: "+guardadas);
+    }
+
+
+
+    public void guardarEnBD(Reserva r)  {
+        dao.insertar(r);
     }
 
 }

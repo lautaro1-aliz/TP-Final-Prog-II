@@ -46,13 +46,28 @@ public class GestionHotel {
     }
 
     public Usuario iniciarSesion(String username,String password) {
-
-        return pasajeros.validarCredenciales(username,password);
+        Empleado emp = empleados.buscarPorCredenciales(username,password);
+        if(emp != null){
+            return emp;
+        }
+        Pasajero pasajero = pasajeros.buscarPorCredenciales(username,password);
+        if(pasajero != null){
+            return pasajero;
+        }
+        return null;
     }
+
 
     public boolean altaHabitacion(Habitacion h){
 
         return habitaciones.agregarHabitacion(h);
+    }
+
+    public void backup(){
+        habitaciones.guardarBD();
+        pasajeros.guardarBD();
+        reservas.guardarBD();
+        empleados.guardarBD();
     }
 
 

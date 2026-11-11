@@ -2,6 +2,8 @@ package Gestores;
 
 import Entidades.Habitacion;
 import Enums.EstadoHabitacion;
+import Interfaces.DAO;
+import dao.HabitacionDAO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
+    final DAO<Habitacion> dao = new HabitacionDAO();
     public List<Habitacion> listarPorTipo(String tipo) {
         List<Habitacion> resultado = new ArrayList<>();
         for (Habitacion h : elementos) {
@@ -95,14 +98,20 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         habitacion.setEstado(EstadoHabitacion.LIBRE);
         return true;
     }
+    public  void guardarBD(){
+        int guardadas= 0;
+        for(Habitacion h: elementos){
+            guardarEnBD(h);
+            guardadas++;
+        }
+        System.out.println("Habitaciones guardadas: "+guardadas);
+    }
 
 
 
-
-
-//    public void guardarEnBD(Habitacion h)  {
-//        dao.insertar(h);
-//    }
+    public void guardarEnBD(Habitacion h)  {
+        dao.insertar(h);
+    }
 //
 //    public List<Habitacion> listarDesdeBD() {
 //        return dao.listarTodos();

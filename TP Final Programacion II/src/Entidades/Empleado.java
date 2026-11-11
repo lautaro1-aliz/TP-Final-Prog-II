@@ -18,6 +18,9 @@ public class Empleado extends Usuario {
     public Empleado() {
     }
 
+    public Empleado(int legajo, String nombre, String email, String password) {
+    }
+
     public int getLegajo() {
         return legajo;
     }

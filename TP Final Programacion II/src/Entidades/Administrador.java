@@ -3,7 +3,7 @@ package Entidades;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Administrador extends Usuario {
+public class Administrador extends Empleado {
     private List<String> permisos;
     private String nivelAcceso;
 

@@ -99,10 +99,6 @@ public class HabitacionDAO implements DAO<Habitacion> {
         }
     }
 
-    @Override
-    public Habitacion login(String username, String password) {
-        return null;
-    }
 
     private Habitacion crearHabitacion(ResultSet rs) throws SQLException {
         String tipo = rs.getString("tipo");

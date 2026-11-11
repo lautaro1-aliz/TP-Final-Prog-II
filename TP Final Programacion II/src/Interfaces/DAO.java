@@ -21,5 +21,4 @@ public interface DAO <T>{
     //eliminar
     void eliminar(String codigo);
 
-    T login(String username, String password);
 }
