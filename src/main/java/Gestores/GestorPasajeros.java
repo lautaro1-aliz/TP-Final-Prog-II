@@ -37,7 +37,9 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
         System.out.println("Habitaciones guardadas: "+guardadas);
     }
 
-
+    public void actualizarPass(Usuario u){
+        dao.actualizar(u);
+    }
 
     public void guardarEnBD(Pasajero p)  {
         dao.insertar(p);

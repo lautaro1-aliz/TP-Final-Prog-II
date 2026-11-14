@@ -69,9 +69,6 @@ public class GestionHotel {
         empleados.actualizarDatos(e);
 
     }
-
-
-
     public boolean altaHabitacion(Habitacion h){
         return habitaciones.agregarHabitacion(h);
     }
@@ -83,7 +80,11 @@ public class GestionHotel {
         empleados.guardarBD();
     }
 
+    ///Metodos correspondientes al Menu Pasajero
 
+    public void cambiarContrasenia(Usuario u){
+        pasajeros.actualizarPass(u);
+    }
 
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
     public List<Habitacion> listarHabitacionesDisponibles(

@@ -39,7 +39,7 @@ public class MenuPrincipal {
                    MenuRecepcionista.mostrar();
                   break;
             case PASAJERO:
-                  MenuPasajero.mostrar();
+                  MenuPasajero.mostrar(sistema, user);
                    break;
             }
         }
