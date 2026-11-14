@@ -69,11 +69,11 @@ public class HabitacionDAO implements DAO<Habitacion> {
     }
 
     @Override
-    public Habitacion buscarPorId(String codigo) {
+    public Habitacion buscarPorId(int id) {
         /// ejecuta la query y si encontro lo buscado lo mapea y retorna
         /// añadi excepcion ElementoNoEncontrado para informar al usuario si no existe la habitacion
         try(PreparedStatement ps = ConexionBD.getConexion().prepareStatement(SQL_BUSCAR)) {
-            ps.setString(1,codigo);
+            ps.setInt(1,id);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()) {
                     return crearHabitacion(rs);
@@ -87,11 +87,11 @@ public class HabitacionDAO implements DAO<Habitacion> {
     }
 
     @Override
-    public void eliminar(String codigo) {
+    public void eliminar(int id) {
         int filas;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_ELIMINAR)) {
-            ps.setString(1, codigo);
+            ps.setInt(1, id);
             filas = ps.executeUpdate();
             if(filas == 0){
                 // TODO añadir excepciones

@@ -17,17 +17,29 @@ import java.util.List;
 
 public class UsuarioDAO implements DAO<Usuario> {
 
-    private static final String SQL_INSERTAR = " INSERT INTO usuarios (codigo, tipo, nombre, piso, precio_por_noche, vista,estado, cantidad_camas, jacuzzi, capacidad_personas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-    private static final String SQL_LISTAR = "SELECT * FROM usuarios ORDER BY codigo";
-    private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE codigo = ?";
-    private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
-    private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE codigo = ?";
+    private static final String SQL_INSERTAR = "INSERT INTO usuarios (nombre,apellido,dni,mail,password,telefono,rol) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_LISTAR = "SELECT * FROM usuarios WHERE rol = ? ORDER BY id";
+    private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE id = ?";
+    private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET mail = ?, password = ? WHERE dni =  ?";
+    private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE id = ?";
     @Override
-    public void insertar(Usuario elemento) {
+    public void insertar(Usuario u) {
+        int filas = 0;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_INSERTAR)) {
-
-            ps.executeUpdate();
+            ps.setString(1,u.getNombre());
+            ps.setString(2, u.getApellido());
+            ps.setString(3,u.getDNI());
+            ps.setString(4,u.getMail());
+            ps.setString(5,u.getPassword());
+            ps.setString(6,u.getTelefono());
+            ps.setString(7,u.getRol().name());
+            filas = ps.executeUpdate();
+            if(filas!=0){
+                System.out.println(u.getRol()+" insertado correctamente.");
+            }else{
+                throw new RuntimeException("Error al insertar usuario");
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -41,11 +53,11 @@ public class UsuarioDAO implements DAO<Usuario> {
         try(Connection con = ConexionBD.getConexion();
             PreparedStatement ps = con.prepareStatement(listar)){
 
-               try (ResultSet rs = ps.executeQuery()){
-                    while(rs.next()){
-                        resultado.add(mapear(rs));
-                    }
-               }
+            try (ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    resultado.add(mapear(rs));
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,20 +66,78 @@ public class UsuarioDAO implements DAO<Usuario> {
     }
 
     @Override
-    public Usuario buscarPorId(String codigo) {
+    public Usuario buscarPorId(int id) {
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(SQL_BUSCAR)){
+            ps.setInt(1,id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return mapear(rs);
+                }
+                //todo añadir excepcion
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
     @Override
-    public void actualizar(Usuario elemento) {
+    public void actualizar(Usuario u) {
+        int filas = 0;
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)){
+            ps.setString(1,u.getMail());
+            ps.setString(2,u.getPassword());
+            ps.setString(1,u.getDNI());
+            filas = ps.executeUpdate();
+            if(filas!=0){
+                System.out.println("Cambios realizados correctamente");
+            }else{
+                //todo añadir excepcion
+                System.out.println("No hay usuario registrado con ese dni");
+            }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void eliminar(String codigo) {
+    public void eliminar(int id) {
+        int filas = 0;
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(SQL_ELIMINAR)){
+            ps.setInt(1,id);
 
+            filas = ps.executeUpdate();
+            if (filas ==0){
+                throw new SQLException("Usuario no encontrado");
+            }
+            System.out.println("Usuario eliminado correctamente");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    private List<Usuario> listarPorRol(Rol rol){
+        List<Usuario> resultado = new ArrayList<>();
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(SQL_LISTAR)){
+            ps.setString(1, rol.name());
+
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    resultado.add(mapear(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultado;
+    }
+    
     public static Usuario mapear(ResultSet rs) throws SQLException {
 
         Rol rol = Rol.valueOf(rs.getString("rol"));

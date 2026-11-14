@@ -45,12 +45,12 @@ public class ReservaDAO implements DAO<Reserva> {
     }
 
     @Override
-    public Reserva buscarPorId(String codigo) {
+    public Reserva buscarPorId(int id) {
         return null;
     }
 
     @Override
-    public void eliminar(String codigo) {
+    public void eliminar(int id) {
 
     }
 }

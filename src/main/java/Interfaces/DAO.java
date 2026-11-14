@@ -13,12 +13,12 @@ public interface DAO <T>{
     List<T> listarTodos();
 
     //buscar por ID
-    T buscarPorId(String codigo);
+    T buscarPorId(int id);
 
     //modificar
     void actualizar(T elemento);
 
     //eliminar
-    void eliminar(String codigo);
+    void eliminar(int id);
 
 }
