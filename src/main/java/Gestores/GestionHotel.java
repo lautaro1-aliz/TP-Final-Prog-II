@@ -2,6 +2,7 @@ package Gestores;
 
 import Entidades.*;
 import Enums.EstadoHabitacion;
+import dao.UsuarioDAO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class GestionHotel {
     }
 
     public void agregarUsuario(Usuario u){
+        UsuarioDAO uDAO = new UsuarioDAO();
+        uDAO.insertar(u);
         if(u instanceof Pasajero){
             Pasajero p = (Pasajero) u;
             pasajeros.agregar(p);

@@ -1,5 +1,7 @@
 package Interfaces;
 
+import Enums.Rol;
+
 import java.util.List;
 
 public interface DAO <T>{

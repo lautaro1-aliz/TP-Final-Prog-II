@@ -13,9 +13,9 @@ import java.util.List;
 
 public class HabitacionDAO implements DAO<Habitacion> {
 
-    private static final String SQL_INSERTAR = "INSERT INTO habitaciones (codigo, tipo, nombre, piso, precio_por_noche, vista, "
+    private static final String SQL_INSERTAR = " INSERT INTO habitaciones (codigo, tipo, nombre, piso, precio_por_noche, vista, "
             + "estado, cantidad_camas, jacuzzi, capacidad_personas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_LISTAR = "SELECT * FROM habitaciones ORDER BY codigo";
+    private static final String SQL_LISTAR = " SELECT * FROM habitaciones ORDER BY codigo";
     private static final String SQL_BUSCAR = "SELECT * FROM habitaciones WHERE codigo = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE habitaciones SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
     private static final String SQL_ELIMINAR = "DELETE FROM habitaciones WHERE codigo = ?";

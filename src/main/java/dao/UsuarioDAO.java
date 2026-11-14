@@ -12,18 +12,45 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO implements DAO<Usuario> {
 
+    private static final String SQL_INSERTAR = " INSERT INTO usuarios (codigo, tipo, nombre, piso, precio_por_noche, vista,estado, cantidad_camas, jacuzzi, capacidad_personas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+    private static final String SQL_LISTAR = "SELECT * FROM usuarios ORDER BY codigo";
+    private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE codigo = ?";
+    private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
+    private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE codigo = ?";
     @Override
     public void insertar(Usuario elemento) {
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(SQL_INSERTAR)) {
 
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public List<Usuario> listarTodos() {
-        return List.of();
+        List<Usuario> resultado = new ArrayList<>();
+        String listar = "SELECT * FROM usuarios";
+
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(listar)){
+
+               try (ResultSet rs = ps.executeQuery()){
+                    while(rs.next()){
+                        resultado.add(mapear(rs));
+                    }
+               }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultado;
     }
 
     @Override
@@ -41,12 +68,45 @@ public class UsuarioDAO implements DAO<Usuario> {
 
     }
 
-    public static Usuario buscarPorCredenciales(
-            String email,
-            String password) {
+    public static Usuario mapear(ResultSet rs) throws SQLException {
+
+        Rol rol = Rol.valueOf(rs.getString("rol"));
+
+        if (rol == Rol.EMPLEADO) {
+            return new Empleado(
+                    rs.getInt("legajo"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("dni"),
+                    rs.getString("mail"),
+                    rs.getString("password"),
+                    rs.getString("telefono")
+            );
+        }else if(rol == Rol.ADMINISTRADOR){
+            return new Administrador(
+                    rs.getInt("legajo"),
+                    rs.getString("nombre"),
+                    rs.getString("apellido"),
+                    rs.getString("dni"),
+                    rs.getString("mail"),
+                    rs.getString("password"),
+                    rs.getString("telefono")
+            );
+        }
+        return new Pasajero(
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getString("dni"),
+                rs.getString("mail"),
+                rs.getString("password"),
+                rs.getString("telefono")
+        );
+    }
+
+    public static Usuario buscarPorCredenciales(String email,String password) {
 
         String sql =
-                "SELECT * FROM usuarios " +
+                " SELECT * FROM usuarios " +
                         "WHERE mail = ? " +
                         "AND password = ?";
 
@@ -59,37 +119,7 @@ public class UsuarioDAO implements DAO<Usuario> {
 
             if (rs.next()) {
 
-                Rol rol = Rol.valueOf(rs.getString("rol"));
-
-                if (rol == Rol.EMPLEADO) {
-                    return new Empleado(
-                            rs.getInt("legajo"),
-                            rs.getString("nombre"),
-                            rs.getString("apellido"),
-                            rs.getString("dni"),
-                            rs.getString("mail"),
-                            rs.getString("password"),
-                            rs.getString("telefono")
-                    );
-                }else if(rol == Rol.ADMINISTRADOR){
-                    return new Administrador(
-                            rs.getInt("legajo"),
-                            rs.getString("nombre"),
-                            rs.getString("apellido"),
-                            rs.getString("dni"),
-                            rs.getString("mail"),
-                            rs.getString("password"),
-                            rs.getString("telefono")
-                    );
-                }
-                return new Pasajero(
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("dni"),
-                        rs.getString("mail"),
-                        rs.getString("password"),
-                        rs.getString("telefono")
-                );
+                return mapear(rs);
             }
 
         } catch (SQLException e) {
