@@ -2,12 +2,16 @@ package Gestores;
 
 import Entidades.Empleado;
 import Entidades.Usuario;
+import Enums.Rol;
 import Interfaces.DAO;
 import dao.UsuarioDAO;
 
+import java.util.List;
+
 public class GestorEmpleados extends GestorGenerico<Empleado> {
 
-    final DAO<Usuario> dao = new UsuarioDAO();
+    private UsuarioDAO dao  = new UsuarioDAO();
+
     public void realizarCheckIn(){}
 
     public void realizarCheckOut(){}
@@ -38,13 +42,16 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
     }
 
-    public Empleado buscarPorCredenciales(String email,String password){
-
-        return (Empleado) UsuarioDAO.buscarPorCredenciales(email,password);
-    }
-
-
     public void guardarEnBD(Empleado e)  {
         dao.insertar(e);
+    }
+
+    public List<Usuario> mostrarEmpleados(){
+        return dao.listarPorRol(Rol.EMPLEADO);
+    }
+
+    public void actualizarDatos(Empleado e){
+
+        dao.actualizar(e);
     }
 }

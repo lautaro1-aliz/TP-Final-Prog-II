@@ -19,6 +19,7 @@ public class Administrador extends Empleado {
     public Administrador(String DNI, String nombre, String apellido, String telefono, String mail, String password) {
         super(DNI, nombre, apellido, telefono, mail, password);
         this.permisos = new ArrayList<>();
+        setRol(Rol.ADMINISTRADOR);
         this.nivelAcceso = "Todos los permisos";
     }
 
@@ -50,5 +51,8 @@ public class Administrador extends Empleado {
         return "Administrador";
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

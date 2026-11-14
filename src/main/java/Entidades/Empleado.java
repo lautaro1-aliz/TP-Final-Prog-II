@@ -51,5 +51,10 @@ public class Empleado extends Usuario {
         return "Empleado";
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString() +
+                " | Rol: " + rol() +
+                " | Turno: " + turno;
+    }
 }

@@ -26,6 +26,7 @@ public class MenuPrincipal {
 
         Usuario user = sistema.iniciarSesion(mail,password);
 
+
         if(user == null){
             System.out.println("Credenciales incorrectas");
 

@@ -8,7 +8,7 @@ public class ConexionBD {
 
     private static final String URL = "jdbc:mysql://localhost:3306/hotel_db";
     private static final String USUARIO = "root";
-    private static final String CLAVE = "bdd1";
+    private static final String CLAVE = "lautaro1";
 
     private ConexionBD() {
     }

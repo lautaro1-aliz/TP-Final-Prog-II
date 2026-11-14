@@ -13,6 +13,7 @@ public class MenuAdminstrador {
 
     public static void mostrar(GestionHotel sistema){
         Scanner in = new Scanner(System.in);
+
         int op;
         do {
             System.out.println("===== MENU ADMINISTRADOR =====");
@@ -22,7 +23,8 @@ public class MenuAdminstrador {
             System.out.println("4. Baja habitacion ");
             System.out.println("5. Realizar Backup de los datos ");
             System.out.println("6. Listar habitaciones disponibles ");
-            System.out.println("7. Actualizar datos "); //esta opcion podria  desglosar un menu nuevo y actualizar datos de empleados o habitaciones
+            System.out.println("7. Actualizar credenciales empleado "); //esta opcion podria  desglosar un menu nuevo y actualizar datos de empleados o habitaciones
+            System.out.println("8. Ver maestro de empleados ");
             System.out.println("0. Salir ");
             op = in.nextInt();
             switch (op) {
@@ -57,12 +59,15 @@ public class MenuAdminstrador {
                     LocalDate fechaF = LocalDate.parse(fechaTexto, formatter);
 
                     System.out.println("Ingrese la capacidad de la habitacion: ");
-                    int cantidad =in.nextInt();
+                    int cantidad = in.nextInt();
                     sistema.listarHabitacionesDisponibles(fechaF,fechaF,cantidad);
 
                     break;
                 case 7:
-               //     sistema;
+                    sistema.actualizarDatosEmpleado(solicitarDatosEmpleado());
+                    break;
+                case 8:
+                    sistema.listarEmpleados();
                     break;
                 case 0:
                     System.out.println("Saliendo...");
@@ -75,7 +80,7 @@ public class MenuAdminstrador {
         in.close();
     }
 
-    public static Usuario solicitarDatosEmpleado() {
+    public static Empleado solicitarDatosEmpleado() {
 
         Scanner in = new Scanner(System.in);
         System.out.println("DNI: ");

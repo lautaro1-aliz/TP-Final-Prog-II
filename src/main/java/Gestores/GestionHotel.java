@@ -26,16 +26,34 @@ public class GestionHotel {
         reservas = new GestorReservas();
         empleados = new GestorEmpleados();
     }
+    ///llamada para inicio de sesion, devuelve un usuario
+    public Usuario iniciarSesion(String username,String password) {
+        return UsuarioDAO.buscarPorCredenciales(username, password);
+    }
+
+    /// Metodos correspondientes al menu Administrador
 
     public void agregarUsuario(Usuario u){
         UsuarioDAO uDAO = new UsuarioDAO();
+        // inserta en la base de datos
         uDAO.insertar(u);
+
+        //guarda en memoria
+
         if(u instanceof Pasajero){
             Pasajero p = (Pasajero) u;
             pasajeros.agregar(p);
         }else if(u instanceof Empleado){
             Empleado e = (Empleado) u;
             empleados.agregar(e);
+        }
+    }
+
+    public void listarEmpleados(){
+        //devuelve una lista de los empleados
+        List<Usuario> resultado = empleados.mostrarEmpleados();
+        for(Usuario u: resultado){
+            System.out.println(u.toString());
         }
     }
 
@@ -47,21 +65,14 @@ public class GestionHotel {
         }
     }
 
-    public Usuario iniciarSesion(String username,String password) {
-        Empleado emp = empleados.buscarPorCredenciales(username,password);
-        if(emp != null){
-            return emp;
-        }
-        Pasajero pasajero = pasajeros.buscarPorCredenciales(username,password);
-        if(pasajero != null){
-            return pasajero;
-        }
-        return null;
+    public void actualizarDatosEmpleado(Empleado e){
+        empleados.actualizarDatos(e);
+
     }
 
 
-    public boolean altaHabitacion(Habitacion h){
 
+    public boolean altaHabitacion(Habitacion h){
         return habitaciones.agregarHabitacion(h);
     }
 
@@ -180,5 +191,6 @@ public class GestionHotel {
 
         return true;
     }
+
 
 }

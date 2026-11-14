@@ -114,4 +114,13 @@ public abstract class Usuario implements Identificable {
 
     public abstract String rol();
 
+    @Override
+    public String toString() {
+        return "Usuario: " +
+                "| Nombre: " + nombre  +
+                " | Apellido: " + apellido  +
+                " | DNI: " + DNI  +
+                " | mail: " + mail  +
+                " | Telefono" + telefono ;
+    }
 }

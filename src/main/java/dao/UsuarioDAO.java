@@ -121,7 +121,7 @@ public class UsuarioDAO implements DAO<Usuario> {
         }
     }
 
-    private List<Usuario> listarPorRol(Rol rol){
+    public List<Usuario> listarPorRol(Rol rol){
         List<Usuario> resultado = new ArrayList<>();
         try(Connection con = ConexionBD.getConexion();
             PreparedStatement ps = con.prepareStatement(SQL_LISTAR)){
@@ -144,33 +144,29 @@ public class UsuarioDAO implements DAO<Usuario> {
 
         if (rol == Rol.EMPLEADO) {
             return new Empleado(
-                    rs.getInt("legajo"),
+                    rs.getString("dni"),
                     rs.getString("nombre"),
                     rs.getString("apellido"),
-                    rs.getString("dni"),
+                    rs.getString("telefono"),
                     rs.getString("mail"),
-                    rs.getString("password"),
-                    rs.getString("telefono")
-            );
+                    rs.getString("password"));
         }else if(rol == Rol.ADMINISTRADOR){
             return new Administrador(
-                    rs.getInt("legajo"),
+                    rs.getString("dni"),
                     rs.getString("nombre"),
                     rs.getString("apellido"),
-                    rs.getString("dni"),
+                    rs.getString("telefono"),
                     rs.getString("mail"),
-                    rs.getString("password"),
-                    rs.getString("telefono")
-            );
+                    rs.getString("password"));
         }
+        System.out.println("Creando pasajero");
         return new Pasajero(
                 rs.getString("nombre"),
                 rs.getString("apellido"),
                 rs.getString("dni"),
                 rs.getString("mail"),
-                rs.getString("password"),
-                rs.getString("telefono")
-        );
+                rs.getString("telefono"),
+                rs.getString("password"));
     }
 
     public static Usuario buscarPorCredenciales(String email,String password) {
@@ -188,7 +184,6 @@ public class UsuarioDAO implements DAO<Usuario> {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-
                 return mapear(rs);
             }
 
