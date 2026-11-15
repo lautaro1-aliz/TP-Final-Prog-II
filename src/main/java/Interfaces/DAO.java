@@ -2,12 +2,13 @@ package Interfaces;
 
 import Enums.Rol;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DAO <T>{
 
     //dar de alta,
-    void insertar(T elemento);
+    void insertar(T elemento) throws SQLException;
 
     //listar todos
     List<T> listarTodos();

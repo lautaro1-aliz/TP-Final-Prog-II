@@ -16,6 +16,9 @@ public class Reserva implements Identificable {
     private Habitacion habitacion;
     private Usuario usuario;
     private EstadoReserva estado;
+    ///creo que conviene mas almacenaer solo el id del usuario y habitacion
+    private int id_user;
+    private int id_hab;
 
     public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Usuario usuario) {
         this.id = contador++;
@@ -34,11 +37,23 @@ public class Reserva implements Identificable {
         this.id = id;
     }
 
+    public int getId_hab() {
+        return id_hab;
+    }
 
+    public void setId_hab(int id_hab) {
+        this.id_hab = id_hab;
+    }
 
+    public int getId_user() {
+        return id_user;
+    }
 
+    public void setId_user(int id_user) {
+        this.id_user = id_user;
+    }
 
-    ///Lo dejo por las dudas pero en la logica no haria falta setearlo ya que seria autoincremental
+///Lo dejo por las dudas pero en la logica no haria falta setearlo ya que seria autoincremental
     /**
      * public void setId(int id) {
      * this.id = id;
