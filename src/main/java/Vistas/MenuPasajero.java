@@ -21,20 +21,55 @@ public class MenuPasajero {
                 System.out.println("1. Cambiar contraseña ");
                 System.out.println("2. Reservar habitacion ");
                 System.out.println("3. Cancelar reserva ");
-                System.out.println("4. Baja habitacion ");
-                System.out.println("5. Realizar Backup de los datos ");
+                System.out.println("4. Ver habitaciones disponibles ");
                 System.out.println("0. Salir ");
                 op = in.nextInt();
+                in.nextLine(); //limpio el buffer
                 switch (op) {
                     case 1:
                         System.out.println("Ingrese la nueva contraseña: ");
+
                         String pass =in.nextLine();
                         u.setPassword(pass);
+                        System.out.println(u.toString());
                         sistema.cambiarContrasenia(u);
                         break;
                     case 2:
-                        break;
+                        System.out.println("Ingrese el id de la habitacion que desea reservar: ");
+                        int id_hab = in.nextInt();
+                        in.nextLine(); //limpio buffer
 
+                        System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                        String fecha = in.nextLine();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate fechaI = LocalDate.parse(fecha, formatter);
+
+                        System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
+                        fecha = in.nextLine();
+                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate fechaF = LocalDate.parse(fecha, formatter);
+
+                        sistema.registrarReserva(id_hab, u.getDNI(),fechaI,fechaF);
+                        break;
+                    case 3:
+                    //    sistema.cancelarReserva();
+                        break;
+                    case 4:
+                        System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                        String fechaTexto = in.nextLine();
+                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        fechaI = LocalDate.parse(fechaTexto, formatter);
+
+                        System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
+                        fechaTexto = in.nextLine();
+                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        fechaF = LocalDate.parse(fechaTexto, formatter);
+
+                        System.out.println("Ingrese la capacidad de la habitacion: ");
+                        int capacidad = in.nextInt();
+
+                        sistema.listarHabitacionesDisponibles(fechaI,fechaF,capacidad);
+                        break;
                     case 0:
                         System.out.println("Saliendo...");
                         break;

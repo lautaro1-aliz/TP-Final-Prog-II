@@ -16,6 +16,7 @@ public class Pasajero extends Usuario{
         //todo ver como mapear el domicilio
     //    this.domicilio = domicilio;
         this.nacionalidad = nacionalidad;
+        setRol(Rol.PASAJERO);
     }
 
     @Override
@@ -23,6 +24,9 @@ public class Pasajero extends Usuario{
         return "Pasajero";
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString()+"Pasajero{" + getPassword();
+    }
 }
 

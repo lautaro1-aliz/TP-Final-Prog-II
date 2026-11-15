@@ -27,6 +27,7 @@ public class MenuAdminstrador {
             System.out.println("8. Ver maestro de empleados ");
             System.out.println("0. Salir ");
             op = in.nextInt();
+            in.nextLine(); //limpio buffer
             switch (op) {
                 case 1:
                     sistema.agregarUsuario(solicitarDatosEmpleado());
@@ -53,7 +54,7 @@ public class MenuAdminstrador {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate fechaI = LocalDate.parse(fechaTexto, formatter);
 
-                    System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                    System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
                     fechaTexto = in.nextLine();
                     formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     LocalDate fechaF = LocalDate.parse(fechaTexto, formatter);

@@ -86,9 +86,14 @@ public class GestionHotel {
         pasajeros.actualizarPass(u);
     }
 
+
+
+    public boolean cancelarReserva(){
+        return false;
+    }
+
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
-    public List<Habitacion> listarHabitacionesDisponibles(
-            LocalDate fechaInicio, LocalDate fechaFin, int capacidad) {
+    public List<Habitacion> listarHabitacionesDisponibles(LocalDate fechaInicio, LocalDate fechaFin, int capacidad) {
 
         List<Habitacion> disponibles = new ArrayList<>();
 
@@ -134,7 +139,7 @@ public class GestionHotel {
 
     public boolean registrarReserva(int idHabitacion, String dniUsuario, LocalDate fechaInicio, LocalDate fechaFin) {
 
-
+        //TODO personalizar un mensaje o lanzar una excepcion por cada retorno
         Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
         Pasajero pasajero  =  pasajeros.buscarUsuario(dniUsuario);
 

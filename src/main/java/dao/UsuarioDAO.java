@@ -22,6 +22,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE id = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET mail = ?, password = ? WHERE dni =  ?";
     private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE id = ?";
+
     @Override
     public void insertar(Usuario u) {
         int filas = 0;
@@ -90,7 +91,7 @@ public class UsuarioDAO implements DAO<Usuario> {
             PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)){
             ps.setString(1,u.getMail());
             ps.setString(2,u.getPassword());
-            ps.setString(1,u.getDNI());
+            ps.setString(3,u.getDNI());
             filas = ps.executeUpdate();
             if(filas!=0){
                 System.out.println("Cambios realizados correctamente");
@@ -159,7 +160,6 @@ public class UsuarioDAO implements DAO<Usuario> {
                     rs.getString("mail"),
                     rs.getString("password"));
         }
-        System.out.println("Creando pasajero");
         return new Pasajero(
                 rs.getString("nombre"),
                 rs.getString("apellido"),
