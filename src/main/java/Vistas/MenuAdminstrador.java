@@ -5,13 +5,14 @@ import Entidades.Habitacion;
 import Entidades.Usuario;
 import Gestores.GestionHotel;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MenuAdminstrador {
 
-    public static void mostrar(GestionHotel sistema){
+    public static void mostrar(GestionHotel sistema) throws SQLException {
         Scanner in = new Scanner(System.in);
 
         int op;

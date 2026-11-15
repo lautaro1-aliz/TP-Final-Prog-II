@@ -5,6 +5,7 @@ import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
 import dao.UsuarioDAO;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,14 +80,14 @@ public class GestionHotel {
         return habitaciones.agregarHabitacion(h);
     }
 
-    public void backup(){
+    public void backup() throws SQLException {
         habitaciones.guardarBD();
         pasajeros.guardarBD();
         reservas.guardarBD();
         empleados.guardarBD();
     }
 
-    ///Metodos correspondientes al Menu Pasajero
+    //Metodos correspondientes al Menu Pasajero
 
     public void cambiarContrasenia(Usuario u){
         pasajeros.actualizarPass(u);

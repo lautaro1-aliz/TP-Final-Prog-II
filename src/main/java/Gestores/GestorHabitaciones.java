@@ -5,6 +5,7 @@ import Enums.EstadoHabitacion;
 import Interfaces.DAO;
 import dao.HabitacionDAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         habitacion.setEstado(EstadoHabitacion.LIBRE);
         return true;
     }
-    public  void guardarBD(){
+    public  void guardarBD() throws SQLException {
         int guardadas= 0;
         for(Habitacion h: elementos){
             guardarEnBD(h);
@@ -124,7 +125,7 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         return true;
     }
 
-    public void guardarEnBD(Habitacion h)  {
+    public void guardarEnBD(Habitacion h) throws SQLException {
         dao.insertar(h);
     }
 //
