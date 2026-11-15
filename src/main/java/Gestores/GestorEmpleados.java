@@ -3,20 +3,57 @@ package Gestores;
 import Entidades.Empleado;
 import Entidades.Usuario;
 import Enums.Rol;
-import Interfaces.DAO;
 import dao.UsuarioDAO;
+import Entidades.Reserva;
+import Enums.EstadoReserva;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GestorEmpleados extends GestorGenerico<Empleado> {
 
-    private UsuarioDAO dao  = new UsuarioDAO();
+    private final UsuarioDAO dao  = new UsuarioDAO();
 
-    public void realizarCheckIn(){}
+    public boolean realizarCheckIn(GestorReservas reservas,
+                                   GestorHabitaciones habitaciones,
+                                   int idReserva) {
 
-    public void realizarCheckOut(){}
+        if (reservas == null || habitaciones == null) return false;
 
-    public void administrarHabitaciones(){}
+        if (!reservas.validarCheckIn(idReserva)) return false;
+
+        Reserva reserva = reservas.buscarReserva(idReserva);
+
+        if (!habitaciones.checkIn(reserva.getHabitacion().getId())) {
+            return false;
+        }
+
+        return reservas.iniciarEstadia(idReserva);
+    }
+
+    public boolean realizarCheckOut(GestorReservas reservas,
+                                    GestorHabitaciones habitaciones,
+                                    int idHabitacion) {
+
+        if (reservas == null || habitaciones == null) return false;
+
+        if (habitaciones.buscarHabitacion(idHabitacion) == null) return false;
+
+        Reserva reservaEnCurso = null;
+
+        for (Reserva r : reservas.listarReservasPorHabitacion(idHabitacion)) {
+            if (r.getEstado() == EstadoReserva.EN_CURSO) {
+                reservaEnCurso = r;
+                break;
+            }
+        }
+
+        if (reservaEnCurso == null) return false;
+
+        if (!habitaciones.checkOut(idHabitacion)) return false;
+
+        return reservas.finalizarEstadia(reservaEnCurso.getId());
+    }
 
 
     public Empleado buscarPorLegajo(int legajo) {
@@ -38,18 +75,24 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
             guardarEnBD(e);
             guardadas++;
         }
-        System.out.println("Habitaciones guardadas: "+guardadas);
-
+        System.out.println("Empleados guardados: " + guardadas);
     }
 
     public void guardarEnBD(Empleado e)  {
         dao.insertar(e);
     }
 
-    public List<Usuario> mostrarEmpleados(){
-        return dao.listarPorRol(Rol.EMPLEADO);
-    }
+    public List<Empleado> mostrarEmpleados() {
+        List<Empleado> empleados = new ArrayList<>();
 
+        for (Usuario usuario : dao.listarPorRol(Rol.EMPLEADO)) {
+            if (usuario instanceof Empleado) {
+                empleados.add((Empleado) usuario);
+            }
+        }
+
+        return empleados;
+    }
     public void actualizarDatos(Empleado e){
 
         dao.actualizar(e);

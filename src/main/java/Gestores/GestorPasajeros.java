@@ -11,6 +11,12 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
 
 
     public Pasajero buscarPorDni(String dni) {
+
+        ///Validacion momentanea hasta utilizar excepcion
+        if (dni == null) {
+            return null;
+        }
+
         for (Pasajero p : elementos) {
             if (p.getDNI().equalsIgnoreCase(dni)) {
                 return p;
@@ -19,13 +25,16 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
         return null;
     }
 
-    public Pasajero buscarUsuario(String dni) {
-        return buscar(dni);
-    }
 
-    public Pasajero buscarPorCredenciales(String email,String password){
+    public Pasajero buscarPorCredenciales(String email, String password) {
+        Usuario usuario = UsuarioDAO.buscarPorCredenciales(email, password);
 
-        return (Pasajero) UsuarioDAO.buscarPorCredenciales(email,password);
+        ///casteo momentaneo para evitar que un error si las credenciales son un empleado por ejemplo
+        if (usuario instanceof Pasajero) {
+            return (Pasajero) usuario;
+        }
+
+        return null;
     }
 
     public  void guardarBD(){
@@ -34,7 +43,7 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
             guardarEnBD(p);
             guardadas++;
         }
-        System.out.println("Habitaciones guardadas: "+guardadas);
+        System.out.println("Pasajeros guardados: "+guardadas);
     }
 
     public void actualizarPass(Usuario u){

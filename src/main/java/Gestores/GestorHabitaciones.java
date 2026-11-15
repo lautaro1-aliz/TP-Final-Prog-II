@@ -11,8 +11,15 @@ import java.util.List;
 public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
     final DAO<Habitacion> dao = new HabitacionDAO();
+
     public List<Habitacion> listarPorTipo(String tipo) {
         List<Habitacion> resultado = new ArrayList<>();
+
+        ///Validacion para que no introduzcan un valor nulo mas adelante se puede cambiar por una excepcion
+        if (tipo == null || tipo.isBlank()) {
+            return resultado;
+        }
+
         for (Habitacion h : elementos) {
             if (h.getTipo().equalsIgnoreCase(tipo)) {
                 resultado.add(h);
@@ -106,7 +113,16 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         System.out.println("Habitaciones guardadas: "+guardadas);
     }
 
+    public boolean marcarHabitacionNoDisponible(int id, String motivo) {
+        Habitacion habitacion = buscarHabitacion(id);
 
+        if (habitacion == null || motivo == null || motivo.isBlank()) {
+            return false;
+        }
+
+        habitacion.marcarNoDisponible(motivo);
+        return true;
+    }
 
     public void guardarEnBD(Habitacion h)  {
         dao.insertar(h);

@@ -24,11 +24,11 @@ public class GestorGenerico<T extends Identificable> {
     /**public void eliminar(int indice) {
         T elemento = buscarPorIndice(indice);
         elementos.remove(elemento);
-    }*/
+    }
 
     public void eliminar(int indice) {
         elementos.remove(indice);
-    }
+    }*/
 
     public boolean eliminar(T elemento) {
         if (elemento == null) {
@@ -39,6 +39,10 @@ public class GestorGenerico<T extends Identificable> {
     }
 
     public T buscar(String criterio) {
+
+        if (criterio == null) {
+            return null;
+        }
 
         for (T elemento : elementos) {
 

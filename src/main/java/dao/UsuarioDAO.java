@@ -22,6 +22,8 @@ public class UsuarioDAO implements DAO<Usuario> {
     private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE id = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET mail = ?, password = ? WHERE dni =  ?";
     private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE id = ?";
+
+
     @Override
     public void insertar(Usuario u) {
         int filas = 0;
@@ -35,13 +37,13 @@ public class UsuarioDAO implements DAO<Usuario> {
             ps.setString(6,u.getTelefono());
             ps.setString(7,u.getRol().name());
             filas = ps.executeUpdate();
-            if(filas!=0){
-                System.out.println(u.getRol()+" insertado correctamente.");
+            if (filas > 0) {
+                System.out.println(u.getRol() + " insertado correctamente.");
             }else{
                 throw new RuntimeException("Error al insertar usuario");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("Error al insertar usuario", e);
         }
     }
 
@@ -90,7 +92,7 @@ public class UsuarioDAO implements DAO<Usuario> {
             PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)){
             ps.setString(1,u.getMail());
             ps.setString(2,u.getPassword());
-            ps.setString(1,u.getDNI());
+            ps.setString(3,u.getDNI());
             filas = ps.executeUpdate();
             if(filas!=0){
                 System.out.println("Cambios realizados correctamente");
@@ -166,7 +168,8 @@ public class UsuarioDAO implements DAO<Usuario> {
                 rs.getString("dni"),
                 rs.getString("mail"),
                 rs.getString("telefono"),
-                rs.getString("password"));
+                rs.getString("password"),
+                rs.getString("nacionalidad"));
     }
 
     public static Usuario buscarPorCredenciales(String email,String password) {
