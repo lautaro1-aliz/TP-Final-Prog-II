@@ -5,6 +5,8 @@ import Entidades.Usuario;
 import Interfaces.DAO;
 import dao.UsuarioDAO;
 
+import java.sql.SQLException;
+
 public class GestorPasajeros extends GestorGenerico<Pasajero> {
 
     final DAO<Usuario> dao = new UsuarioDAO();
@@ -37,7 +39,7 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
         return null;
     }
 
-    public  void guardarBD(){
+    public  void guardarBD() throws SQLException {
         int guardadas= 0;
         for(Pasajero p: elementos){
             guardarEnBD(p);
@@ -50,7 +52,7 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
         dao.actualizar(u);
     }
 
-    public void guardarEnBD(Pasajero p)  {
+    public void guardarEnBD(Pasajero p) throws SQLException {
         dao.insertar(p);
     }
 }

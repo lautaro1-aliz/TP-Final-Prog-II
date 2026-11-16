@@ -7,6 +7,7 @@ import Enums.EstadoReserva;
 import Interfaces.DAO;
 import dao.ReservaDAO;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -179,7 +180,7 @@ public class GestorReservas extends GestorGenerico<Reserva> {
         return true;
     }
 
-    public void guardarBD() {
+    public void guardarBD() throws SQLException {
         int guardadas = 0;
         for (Reserva r : elementos) {
             guardarEnBD(r);
@@ -189,7 +190,7 @@ public class GestorReservas extends GestorGenerico<Reserva> {
     }
 
 
-    public void guardarEnBD(Reserva r) {
+    public void guardarEnBD(Reserva r) throws SQLException {
         dao.insertar(r);
     }
 
