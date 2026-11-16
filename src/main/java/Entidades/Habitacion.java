@@ -11,6 +11,7 @@ public class Habitacion implements Identificable{
     private EstadoHabitacion estado;
     private double precioXnoche;
     private String tipo;
+    private String motivoNoDisponible;
 
 
     //Constructor
@@ -79,6 +80,14 @@ public class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
+    public String getMotivoNoDisponible() {
+        return motivoNoDisponible;
+    }
+
+    public void setMotivoNoDisponible(String motivoNoDisponible) {
+        this.motivoNoDisponible = motivoNoDisponible;
+    }
+
 
     public double calcularCostoEstadia(int noches){
 
@@ -106,6 +115,10 @@ public class Habitacion implements Identificable{
         return String.valueOf(id).equals(criterio);
     }
 
+    public void marcarNoDisponible(String motivo) {
+        this.estado = EstadoHabitacion.NO_DISPONIBLE;
+        this.motivoNoDisponible = motivo;
+    }
 
 
     @Override

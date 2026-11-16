@@ -2,8 +2,10 @@ package Gestores;
 
 import Entidades.*;
 import Enums.EstadoHabitacion;
+import Enums.EstadoReserva;
 import dao.UsuarioDAO;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class GestionHotel {
     /// Metodos correspondientes al menu Administrador
 
     public void agregarUsuario(Usuario u){
+
         UsuarioDAO uDAO = new UsuarioDAO();
         // inserta en la base de datos
         uDAO.insertar(u);
@@ -49,20 +52,24 @@ public class GestionHotel {
         }
     }
 
-    public void listarEmpleados(){
-        //devuelve una lista de los empleados
-        List<Usuario> resultado = empleados.mostrarEmpleados();
-        for(Usuario u: resultado){
-            System.out.println(u.toString());
+    public void listarEmpleados() {
+        // Devuelve una lista de los empleados
+        List<Empleado> resultado = empleados.mostrarEmpleados();
+
+        for (Empleado e : resultado) {
+            System.out.println(e);
         }
     }
 
-    public void eliminarUsuario(int legajo) {
+    public boolean eliminarUsuario(int legajo) {
 
         Empleado e = empleados.buscarPorLegajo(legajo);
-        if (e != null) {
-            empleados.eliminar(e);
+
+        if (e == null) {
+            return false;
         }
+
+        return empleados.eliminar(e);
     }
 
     public void actualizarDatosEmpleado(Empleado e){
@@ -73,14 +80,14 @@ public class GestionHotel {
         return habitaciones.agregarHabitacion(h);
     }
 
-    public void backup(){
+    public void backup() throws SQLException {
         habitaciones.guardarBD();
         pasajeros.guardarBD();
         reservas.guardarBD();
         empleados.guardarBD();
     }
 
-    ///Metodos correspondientes al Menu Pasajero
+    //Metodos correspondientes al Menu Pasajero
 
     public void cambiarContrasenia(Usuario u){
         pasajeros.actualizarPass(u);
@@ -128,8 +135,8 @@ public class GestionHotel {
 
     public boolean eliminarHabitacion(int id) {
 
-        Habitacion habitacion =habitaciones.buscarHabitacion(id);
-        GestorReservas reservas = new GestorReservas();
+        Habitacion habitacion = habitaciones.buscarHabitacion(id);
+
         if (habitacion == null || reservas.tieneReservasActivas(id)) {
             return false;
         }
@@ -141,7 +148,7 @@ public class GestionHotel {
 
         //TODO personalizar un mensaje o lanzar una excepcion por cada retorno
         Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
-        Pasajero pasajero  =  pasajeros.buscarUsuario(dniUsuario);
+        Pasajero pasajero  =  pasajeros.buscarPorDni(dniUsuario);
 
         if (habitacion == null || pasajero == null) {
             return false;
@@ -169,7 +176,8 @@ public class GestionHotel {
         // Buscamos la reserva original
         Reserva reserva = reservas.buscarReserva(idReserva);
 
-        if (reserva == null || !reserva.estaActiva()) {
+        if (reserva == null ||
+                (reserva.getEstado() != EstadoReserva.PENDIENTE && reserva.getEstado() != EstadoReserva.CONFIRMADA)) {
             return false;
         }
 
@@ -198,5 +206,51 @@ public class GestionHotel {
         return true;
     }
 
+    public boolean realizarCheckIn(int idReserva) {
+        return empleados.realizarCheckIn(reservas, habitaciones, idReserva);
+    }
 
+    public boolean realizarCheckOut(int idHabitacion) {
+        return empleados.realizarCheckOut(reservas, habitaciones, idHabitacion);
+    }
+
+    public boolean confirmarReserva(int idReserva) {
+        return reservas.confirmarReserva(idReserva);
+    }
+
+    public boolean cancelarReserva(int idReserva) {
+        return reservas.cancelarReserva(idReserva);
+    }
+
+    public List<Reserva> listarReservasPorUsuario(String dni) {
+        return reservas.listarReservasPorUsuario(dni);
+    }
+
+    public List<Reserva> listarReservasPorHabitacion(int idHabitacion) {
+        return reservas.listarReservasPorHabitacion(idHabitacion);
+    }
+
+    public List<Habitacion> listarHabitacionesPorEstado(EstadoHabitacion estado) {
+        return habitaciones.listarHabitacionesPorEstado(estado);
+    }
+
+    public boolean marcarHabitacionNoDisponible(int id, String motivo) {
+        return habitaciones.marcarHabitacionNoDisponible(id, motivo);
+    }
+
+    public List<Pasajero> listarPasajeros() {
+        return pasajeros.listar();
+    }
+
+    public void generarInformePasajeros() {
+        List<Pasajero> lista = listarPasajeros();
+
+        for (Pasajero p : lista) {
+            System.out.println("Nombre: " + p.getNombre() + " " + p.getApellido());
+            System.out.println("DNI: " + p.getDNI());
+            System.out.println("Nacionalidad: " + p.getNacionalidad());
+            System.out.println("Domicilio: " + p.getDomicilio());
+            System.out.println("--------------------------------");
+        }
+    }
 }

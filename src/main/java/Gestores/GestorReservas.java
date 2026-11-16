@@ -2,6 +2,7 @@ package Gestores;
 
 import Entidades.Habitacion;
 import Entidades.Reserva;
+import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
 import Interfaces.DAO;
 import dao.ReservaDAO;
@@ -13,9 +14,10 @@ import java.util.List;
 public class GestorReservas extends GestorGenerico<Reserva> {
 
     final DAO<Reserva> dao = new ReservaDAO();
+
     public boolean tieneReservasActivas(int idHabitacion) {
         for (Reserva reserva : listar()) {
-            if (reserva.getHabitacion().getId() == idHabitacion && reserva.estaActiva()) {
+            if (reserva.getHabitacion() != null && reserva.getHabitacion().getId() == idHabitacion && reserva.estaActiva()) {
                 return true;
             }
         }
@@ -27,6 +29,11 @@ public class GestorReservas extends GestorGenerico<Reserva> {
     }
 
     public boolean tieneReservaEnPeriodo(Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin) {
+
+
+        if (habitacion == null || fechaInicio == null || fechaFin == null || !fechaInicio.isBefore(fechaFin)) {
+            return false;
+        }
 
         for (Reserva reserva : listar()) {
 
@@ -41,13 +48,21 @@ public class GestorReservas extends GestorGenerico<Reserva> {
 
     public boolean tieneReservaEnPeriodo(Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin, int idReservaExcluir) {
 
+        if (habitacion == null || fechaInicio == null || fechaFin == null || !fechaInicio.isBefore(fechaFin)) {
+            return false;
+        }
+
         for (Reserva reserva : listar()) {
 
             if (reserva.getId() == idReservaExcluir) {
                 continue;
             }
 
-            if (reserva.estaActiva() && reserva.getHabitacion().getId() == habitacion.getId() && reserva.seSuperpone(fechaInicio, fechaFin)) {
+            if (!reserva.estaActiva()) {
+                continue;
+            }
+
+            if (reserva.getHabitacion().getId() == habitacion.getId() && reserva.seSuperpone(fechaInicio, fechaFin)) {
                 return true;
             }
         }
@@ -63,7 +78,15 @@ public class GestorReservas extends GestorGenerico<Reserva> {
 
         Reserva reserva = buscarReserva(idReserva);
 
-        if (reserva == null || reserva.getEstado() != EstadoReserva.PENDIENTE) {
+        if (reserva == null || reserva.getEstado() != EstadoReserva.PENDIENTE || reserva.getHabitacion() == null || reserva.getHabitacion().getEstado() != EstadoHabitacion.LIBRE) {
+            return false;
+        }
+
+        if (tieneReservaEnPeriodo(
+                reserva.getHabitacion(),
+                reserva.getFechaInicio(),
+                reserva.getFechaFin(),
+                reserva.getId())) {
             return false;
         }
 
@@ -72,10 +95,12 @@ public class GestorReservas extends GestorGenerico<Reserva> {
     }
 
     public boolean cancelarReserva(int idReserva) {
-
         Reserva reserva = buscarReserva(idReserva);
 
-        if (reserva == null || reserva.getEstado() == EstadoReserva.CANCELADA || reserva.getEstado() == EstadoReserva.FINALIZADA) {
+        if (reserva == null ||
+                reserva.getEstado() == EstadoReserva.CANCELADA ||
+                reserva.getEstado() == EstadoReserva.FINALIZADA ||
+                reserva.getEstado() == EstadoReserva.EN_CURSO) {
             return false;
         }
 
@@ -87,9 +112,16 @@ public class GestorReservas extends GestorGenerico<Reserva> {
 
         List<Reserva> resultado = new ArrayList<>();
 
+        if (dni == null) {
+            return resultado;
+        }
+
         for (Reserva reserva : listar()) {
 
-            if (reserva.getUsuario().getDNI().equals(dni)) {
+            if (reserva.getUsuario() != null &&
+                    reserva.getUsuario().getDNI() != null &&
+                    reserva.getUsuario().getDNI().equalsIgnoreCase(dni)) {
+
                 resultado.add(reserva);
             }
         }
@@ -103,7 +135,7 @@ public class GestorReservas extends GestorGenerico<Reserva> {
 
         for (Reserva reserva : listar()) {
 
-            if (reserva.getHabitacion().getId() == idHabitacion) {
+            if (reserva.getHabitacion() != null && reserva.getHabitacion().getId() == idHabitacion) {
                 resultado.add(reserva);
             }
         }
@@ -111,18 +143,53 @@ public class GestorReservas extends GestorGenerico<Reserva> {
         return resultado;
     }
 
-    public  void guardarBD(){
-        int guardadas= 0;
-        for(Reserva r: elementos){
+    public boolean validarCheckIn(int idReserva) {
+        Reserva reserva = buscarReserva(idReserva);
+
+        if (reserva == null) return false;
+
+        if (reserva.getEstado() != EstadoReserva.CONFIRMADA) {
+            return false;
+        }
+
+        if (reserva.getHabitacion() == null) return false;
+
+        return reserva.getHabitacion().getEstado() == EstadoHabitacion.LIBRE;
+    }
+
+    public boolean iniciarEstadia(int idReserva) {
+        Reserva reserva = buscarReserva(idReserva);
+
+        if (reserva == null || reserva.getEstado() != EstadoReserva.CONFIRMADA) {
+            return false;
+        }
+
+        reserva.setEstado(EstadoReserva.EN_CURSO);
+        return true;
+    }
+
+    public boolean finalizarEstadia(int idReserva) {
+        Reserva reserva = buscarReserva(idReserva);
+
+        if (reserva == null || reserva.getEstado() != EstadoReserva.EN_CURSO) {
+            return false;
+        }
+
+        reserva.setEstado(EstadoReserva.FINALIZADA);
+        return true;
+    }
+
+    public void guardarBD() {
+        int guardadas = 0;
+        for (Reserva r : elementos) {
             guardarEnBD(r);
             guardadas++;
         }
-        System.out.println("Habitaciones guardadas: "+guardadas);
+        System.out.println("Reservas guardadas: " + guardadas);
     }
 
 
-
-    public void guardarEnBD(Reserva r)  {
+    public void guardarEnBD(Reserva r) {
         dao.insertar(r);
     }
 

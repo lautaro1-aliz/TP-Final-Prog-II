@@ -131,6 +131,7 @@ public class Reserva implements Identificable {
 
     public boolean estaActiva() {
         return estado == EstadoReserva.PENDIENTE ||
-                estado == EstadoReserva.CONFIRMADA;
+                estado == EstadoReserva.CONFIRMADA ||
+                estado == EstadoReserva.EN_CURSO;
     }
 }

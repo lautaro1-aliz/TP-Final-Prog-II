@@ -4,6 +4,7 @@ import Entidades.Empleado;
 import Entidades.Usuario;
 import Gestores.GestionHotel;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -17,7 +18,7 @@ public class MenuPrincipal {
         in = new Scanner(System.in);
     }
 
-    public void iniciarSesion(){
+    public void iniciarSesion() throws SQLException {
         System.out.println("===Sistema Hotelero===");
         System.out.println("Ingrese su mail: ");
         String mail = in.nextLine();

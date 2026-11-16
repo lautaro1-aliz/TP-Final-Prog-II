@@ -5,14 +5,22 @@ import Enums.EstadoHabitacion;
 import Interfaces.DAO;
 import dao.HabitacionDAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
     final DAO<Habitacion> dao = new HabitacionDAO();
+
     public List<Habitacion> listarPorTipo(String tipo) {
         List<Habitacion> resultado = new ArrayList<>();
+
+        ///Validacion para que no introduzcan un valor nulo mas adelante se puede cambiar por una excepcion
+        if (tipo == null || tipo.isBlank()) {
+            return resultado;
+        }
+
         for (Habitacion h : elementos) {
             if (h.getTipo().equalsIgnoreCase(tipo)) {
                 resultado.add(h);
@@ -97,7 +105,7 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         habitacion.setEstado(EstadoHabitacion.LIBRE);
         return true;
     }
-    public  void guardarBD(){
+    public  void guardarBD() throws SQLException {
         int guardadas= 0;
         for(Habitacion h: elementos){
             guardarEnBD(h);
@@ -106,9 +114,18 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         System.out.println("Habitaciones guardadas: "+guardadas);
     }
 
+    public boolean marcarHabitacionNoDisponible(int id, String motivo) {
+        Habitacion habitacion = buscarHabitacion(id);
 
+        if (habitacion == null || motivo == null || motivo.isBlank()) {
+            return false;
+        }
 
-    public void guardarEnBD(Habitacion h)  {
+        habitacion.marcarNoDisponible(motivo);
+        return true;
+    }
+
+    public void guardarEnBD(Habitacion h) throws SQLException {
         dao.insertar(h);
     }
 //
