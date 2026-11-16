@@ -2,11 +2,15 @@ package dao;
 
 import ConexionBD.ConexionBD;
 import Entidades.Reserva;
+import Entidades.Usuario;
+import Enums.EstadoReserva;
 import Interfaces.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,7 +60,22 @@ public class ReservaDAO implements DAO<Reserva> {
 
     @Override
     public List<Reserva> listarTodos() {
-        return List.of();
+        List<Reserva> resultado = new ArrayList<>();
+        String listar = "SELECT * FROM reservas";
+
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(listar)){
+
+            try (ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    resultado.add(mapear(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return resultado;
     }
 
     @Override
@@ -67,5 +86,15 @@ public class ReservaDAO implements DAO<Reserva> {
     @Override
     public void eliminar(int id) {
 
+    }
+
+    public static Reserva mapear(ResultSet rs) throws SQLException {
+
+        return new Reserva(rs.getInt("id"),
+                            rs.getDate("fecha_I").toLocalDate(),
+                            rs.getDate("Fecha_F").toLocalDate(),
+                            rs.getInt("id_usuario"),
+                            rs.getInt("id_habitacion"),
+                            EstadoReserva.valueOf(rs.getString("estado_reserva").toUpperCase()));
     }
 }

@@ -20,13 +20,26 @@ public class Reserva implements Identificable {
     private int id_user;
     private int id_hab;
 
-    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Usuario usuario) {
-        this.id = contador++;
+    public Reserva(int id, LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Usuario usuario) {
+        this.id = id;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.habitacion = habitacion;
         this.usuario = usuario;
         this.estado = EstadoReserva.PENDIENTE;
+    }
+
+    public Reserva(int id, LocalDate fechaI, LocalDate fechaF, int idUsuario, int idHabitacion, EstadoReserva estado) {
+        this.id = id;
+        this.fechaInicio = fechaI;
+        this.fechaFin = fechaF;
+        this.id_hab = idHabitacion;
+        this.id_user = idUsuario;
+        this.estado = estado;
+    }
+
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Pasajero pasajero) {
+        
     }
 
     public int getId() {
