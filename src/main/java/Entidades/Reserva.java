@@ -16,27 +16,28 @@ public class Reserva implements Identificable {
     private EstadoReserva estado;
     private Usuario usuario;
     private Habitacion habitacion;
-    private int id_user;
-    private int id_hab;
 
 
-    public Reserva(int id, LocalDate fechaI, LocalDate fechaF, int idUsuario, int idHabitacion, EstadoReserva estado) {
-        this.id = id;
-        this.fechaInicio = fechaI;
-        this.fechaFin = fechaF;
-        this.id_hab = idHabitacion;
-        this.id_user = idUsuario;
-        this.estado = estado;
-    }
 
     public Reserva() {
     }
 
-    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, int id, int id1) {
-
+    public Reserva(int id, LocalDate fechaInicio, LocalDate fechaFin, EstadoReserva estado, Usuario usuario, Habitacion habitacion) {
+        this.id = id;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.habitacion = habitacion;
     }
 
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin,Habitacion h,Pasajero p) {
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.usuario = p;
+        this.habitacion = h;
 
+    }
 
     public int getId() {
         return id;
@@ -44,22 +45,6 @@ public class Reserva implements Identificable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getId_hab() {
-        return id_hab;
-    }
-
-    public void setId_hab(int id_hab) {
-        this.id_hab = id_hab;
-    }
-
-    public int getId_user() {
-        return id_user;
-    }
-
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
     }
 
 ///Lo dejo por las dudas pero en la logica no haria falta setearlo ya que seria autoincremental

@@ -22,7 +22,7 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
         Reserva reserva = reservas.buscarReserva(idReserva);
 
-        if (!habitaciones.checkIn(reserva.getId_hab())) {
+        if (!habitaciones.checkIn(reserva.getHabitacion().getId())) {
             return false;
         }
 

@@ -14,7 +14,7 @@ public interface DAO <T>{
     List<T> listarTodos();
 
     //buscar por ID
-    T buscarPorId(int id);
+    T  buscarPorId(int id);
 
     //modificar
     void actualizar(T elemento);

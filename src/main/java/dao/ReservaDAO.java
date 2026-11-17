@@ -1,6 +1,7 @@
 package dao;
 
 import ConexionBD.ConexionBD;
+import Entidades.Habitacion;
 import Entidades.Reserva;
 import Entidades.Usuario;
 import Enums.EstadoReserva;
@@ -17,10 +18,10 @@ import java.util.List;
 public class ReservaDAO implements DAO<Reserva> {
 
     private static final String SQL_INSERTAR = "INSERT INTO reservas (fecha_I,fecha_F,id_usuario,id_habitacion,estado) VALUES (?, ?, ?, ?,?)";
-    private static final String SQL_LISTAR = "SELECT * FROM reservas ORDER BY codigo";
-    private static final String SQL_BUSCAR = "SELECT * FROM reservas WHERE codigo = ?";
+    private static final String SQL_LISTAR = "SELECT * FROM reservas ORDER BY id";
+    private static final String SQL_BUSCAR = "SELECT * FROM reservas WHERE id = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE reservas SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
-    private static final String SQL_ELIMINAR = "DELETE FROM reservas WHERE codigo = ?";
+    private static final String SQL_ELIMINAR = "DELETE FROM reservas WHERE id = ?";
 
     @Override
     public void actualizar(Reserva elemento) {
@@ -46,8 +47,8 @@ public class ReservaDAO implements DAO<Reserva> {
             //paso el tipo de dato de LocalDate a Date para poder guardar en BD
             ps.setDate(1,java.sql.Date.valueOf(r.getFechaInicio()));
             ps.setDate(2,java.sql.Date.valueOf(r.getFechaFin()));
-            ps.setInt(3,r.getId_user());
-            ps.setInt(4,r.getId_hab());
+            ps.setInt(3,r.getUsuario().getId());
+            ps.setInt(4,r.getHabitacion().getId());
             ps.setString(5,r.getEstado().name());
             if(filas == 0){
                 throw new RuntimeException("Error al registrar la reserva");
@@ -80,21 +81,54 @@ public class ReservaDAO implements DAO<Reserva> {
 
     @Override
     public Reserva buscarPorId(int id) {
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(SQL_BUSCAR)){
+            ps.setInt(1,id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return mapear(rs);
+                }
+                //todo añadir excepcion
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
     @Override
     public void eliminar(int id) {
+        int filas = 0;
+        try(Connection con = ConexionBD.getConexion();
+            PreparedStatement ps = con.prepareStatement(SQL_ELIMINAR)){
+            ps.setInt(1,id);
 
+            filas = ps.executeUpdate();
+            if (filas ==0){
+                throw new SQLException("Reserva no encontrada");
+            }
+            System.out.println("Reserva cancelada correctamentw");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Reserva mapear(ResultSet rs) throws SQLException {
 
+        //busco el usuario segun el id en la base de datos
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        Usuario usuario = usuarioDAO.buscarPorId(rs.getInt("id_usuario"));
+
+        //busco la habitacion segun id en base de datos
+        HabitacionDAO habitacionDAO = new HabitacionDAO();
+        Habitacion habitacion = habitacionDAO.buscarPorId(rs.getInt("id_habitacion"));
+
+        //mapeo las columnas faltantes y paso como parametro los objetos obtenidos
         return new Reserva(rs.getInt("id"),
                             rs.getDate("fecha_I").toLocalDate(),
                             rs.getDate("Fecha_F").toLocalDate(),
-                            rs.getInt("id_usuario"),
-                            rs.getInt("id_habitacion"),
-                            EstadoReserva.valueOf(rs.getString("estado_reserva").toUpperCase()));
+                            EstadoReserva.valueOf(rs.getString("estado_reserva").toUpperCase()),
+                            usuario,habitacion);
     }
 }

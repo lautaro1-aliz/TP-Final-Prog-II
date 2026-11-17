@@ -167,7 +167,7 @@ public class GestionHotel {
             return false;
         }
 
-        Reserva reserva = new Reserva(fechaInicio, fechaFin, habitacion.getId(), pasajero.getId());
+        Reserva reserva = new Reserva(fechaInicio, fechaFin, habitacion, pasajero);
 
         return reservas.agregar(reserva);
     }
@@ -200,7 +200,7 @@ public class GestionHotel {
         }
 
         // Actualizamos los datos
-        reserva.setId_hab(nuevaHabitacion.getId());
+        reserva.setHabitacion(nuevaHabitacion);
         reserva.setFechaInicio(nuevaFechaInicio);
         reserva.setFechaFin(nuevaFechaFin);
 
