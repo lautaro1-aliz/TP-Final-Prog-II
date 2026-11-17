@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestorHabitaciones extends GestorGenerico<Habitacion>{
+public class GestorHabitaciones extends GestorGenerico<Habitacion> {
 
     private final HabitacionDAO dao = new HabitacionDAO();
 
@@ -39,10 +39,11 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
 
     public Habitacion buscarHabitacion(int numero) {
-      return buscar(String.valueOf(numero));
-   }
+        return buscar(String.valueOf(numero));
+    }
 
     public boolean agregarHabitacion(Habitacion habitacion) {
+        dao.insertar(habitacion);
         return agregar(habitacion);
     }
 
@@ -97,13 +98,14 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
         habitacion.setEstado(EstadoHabitacion.LIBRE);
         return true;
     }
-    public  void guardarBD() throws SQLException {
-        int guardadas= 0;
-        for(Habitacion h: elementos){
+
+    public void guardarBD() throws SQLException {
+        int guardadas = 0;
+        for (Habitacion h : elementos) {
             guardarEnBD(h);
             guardadas++;
         }
-        System.out.println("Habitaciones guardadas: "+guardadas);
+        System.out.println("Habitaciones guardadas: " + guardadas);
     }
 
     public boolean marcarHabitacionNoDisponible(int id, String motivo) {
@@ -120,30 +122,4 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
     public void guardarEnBD(Habitacion h) throws SQLException {
         dao.insertar(h);
     }
-//
-//    public List<Habitacion> listarDesdeBD() {
-//        return dao.listarTodos();
-//    }
-//
-//    public Habitacion buscarEnBD(String codigo){
-//        return dao.buscarPorId(codigo);
-//    }
-//
-//    public void actualizarEnBD(Habitacion h)  {
-//        dao.actualizar(h);
-//    }
-//
-//    public void eliminarDeBD(String codigo)  {
-//        dao.eliminar(codigo);
-//    }
-//    public void ocuparHabitacion(String codigo) {
-//    Habitacion h = buscar(codigo);
-//    h.ocupar();
-//}
-//
-//    public void desocuparHabitacion(String codigo) {
-//        Habitacion h = buscar(codigo);
-//        h.desocupar();
-//    }
-
 }

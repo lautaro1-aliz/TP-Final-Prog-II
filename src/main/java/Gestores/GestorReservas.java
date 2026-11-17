@@ -26,7 +26,7 @@ public class GestorReservas extends GestorGenerico<Reserva> {
     }
 
     public Reserva buscarReserva(int id) {
-        return buscar(String.valueOf(id));
+        return dao.buscarPorId(id);
     }
 
     public boolean tieneReservaEnPeriodo(Habitacion habitacion, LocalDate fechaInicio, LocalDate fechaFin) {

@@ -34,7 +34,6 @@ public class GestionHotel {
     }
 
     /// Metodos correspondientes al menu Administrador
-
     public void agregarUsuario(Usuario u){
 
         UsuarioDAO uDAO = new UsuarioDAO();
@@ -75,8 +74,20 @@ public class GestionHotel {
         empleados.actualizarDatos(e);
 
     }
+
     public boolean altaHabitacion(Habitacion h){
         return habitaciones.agregarHabitacion(h);
+    }
+
+    public boolean eliminarHabitacion(int id) {
+
+        Habitacion habitacion = habitaciones.buscarHabitacion(id);
+
+        if (habitacion == null || reservas.tieneReservasActivas(id)) {
+            return false;
+        }
+
+        return habitaciones.eliminar(habitacion);
     }
 
     public void backup() throws SQLException {
@@ -86,17 +97,7 @@ public class GestionHotel {
         empleados.guardarBD();
     }
 
-    //Metodos correspondientes al Menu Pasajero
-
-    public void cambiarContrasenia(Usuario u){
-        pasajeros.actualizarPass(u);
-    }
-
-    public boolean cancelarReserva(){
-        return false;
-    }
-
-    /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
+    // Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
     public List<Habitacion> listarHabitacionesDisponibles(LocalDate fechaInicio, LocalDate fechaFin, int capacidad) {
 
 
@@ -133,17 +134,19 @@ public class GestionHotel {
         return disponibles;
     }
 
+    ///Metodos correspondientes al Menu Pasajero
 
-    public boolean eliminarHabitacion(int id) {
-
-        Habitacion habitacion = habitaciones.buscarHabitacion(id);
-
-        if (habitacion == null || reservas.tieneReservasActivas(id)) {
-            return false;
-        }
-
-        return habitaciones.eliminar(habitacion);
+    public void cambiarContrasenia(Usuario u){
+        pasajeros.actualizarPass(u);
     }
+
+    public boolean cancelarReserva(){
+        return false;
+    }
+
+
+
+    ///Metodos correspondientes al Menu Recepcionista
 
     public boolean registrarReserva(int idHabitacion, String dniUsuario, LocalDate fechaInicio, LocalDate fechaFin) {
 
@@ -207,6 +210,7 @@ public class GestionHotel {
         return true;
     }
 
+
     public boolean realizarCheckIn(int idReserva) {
         return empleados.realizarCheckIn(reservas, habitaciones, idReserva);
     }
@@ -240,7 +244,7 @@ public class GestionHotel {
     }
 
     public List<Pasajero> listarPasajeros() {
-        return pasajeros.listar();
+        return pasajeros.listarPasajeros();
     }
 
     public void generarInformePasajeros() {

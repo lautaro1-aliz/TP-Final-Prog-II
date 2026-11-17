@@ -16,9 +16,15 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
     public boolean realizarCheckIn(GestorReservas reservas, GestorHabitaciones habitaciones, int idReserva) {
 
-        if (reservas == null || habitaciones == null) return false;
+        if (reservas == null || habitaciones == null) {
 
-        if (!reservas.validarCheckIn(idReserva)) return false;
+            return false;
+        }
+
+        if (!reservas.validarCheckIn(idReserva)){
+
+            return false;
+        }
 
         Reserva reserva = reservas.buscarReserva(idReserva);
 
@@ -29,9 +35,7 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
         return reservas.iniciarEstadia(idReserva);
     }
 
-    public boolean realizarCheckOut(GestorReservas reservas,
-                                    GestorHabitaciones habitaciones,
-                                    int idHabitacion) {
+    public boolean realizarCheckOut(GestorReservas reservas, GestorHabitaciones habitaciones, int idHabitacion) {
 
         if (reservas == null || habitaciones == null) return false;
 

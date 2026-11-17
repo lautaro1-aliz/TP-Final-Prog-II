@@ -9,8 +9,10 @@ import Gestores.GestionHotel;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
+import InputUtils.*;
 
 public class MenuAdminstrador {
 
@@ -28,6 +30,7 @@ public class MenuAdminstrador {
             System.out.println("6. Listar habitaciones disponibles por fecha ");
             System.out.println("7. Actualizar credenciales empleado "); //esta opcion podria  desglosar un menu nuevo y actualizar datos de empleados o habitaciones
             System.out.println("8. Ver maestro de empleados ");
+            System.out.println("9. Ver total recaudado ");
             System.out.println("0. Salir ");
             op = in.nextInt();
             in.nextLine(); //limpio buffer
@@ -36,34 +39,24 @@ public class MenuAdminstrador {
                     sistema.agregarUsuario(solicitarDatosEmpleado());
                     break;
                 case 2:
-                    System.out.println("Ingrese el nro de legajo del empleado: ");
-                    int legajo = in.nextInt();
+                    int legajo = InputUtils.leerEntero(in,"Ingrese el nro de legajo del empleado: ");
                     sistema.eliminarUsuario(legajo);
                     break;
                 case 3:
+                    //todo no inserta la habitacion
                     sistema.altaHabitacion(solicitarDatosHabitacion(sistema));
                     break;
                 case 4:
-                    System.out.println("Ingrese el ID de la habitacion a eliminar: ");
-                    int id = in.nextInt();
+                    int id = InputUtils.leerEntero(in,"Ingrese el ID de la habitacion a eliminar: ");
                     sistema.eliminarHabitacion(id);
                     break;
                 case 5:
                     sistema.backup();
                     break;
                 case 6:
-                    System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
-                    String fechaTexto = in.nextLine();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    LocalDate fechaI = LocalDate.parse(fechaTexto, formatter);
-
-                    System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
-                    fechaTexto = in.nextLine();
-                    formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    LocalDate fechaF = LocalDate.parse(fechaTexto, formatter);
-
-                    System.out.println("Ingrese la capacidad maxima de la habitacion: ");
-                    int cantidad = in.nextInt();
+                    LocalDate fechaI = InputUtils.leerFecha(in, "Ingrese la fecha de inicio: dd/MM/yyyy");
+                    LocalDate fechaF = InputUtils.leerFecha(in,"Ingrese la fecha de fin:  dd/MM/yyyy");
+                    int cantidad = InputUtils.leerEntero(in, "Ingrese la cantidad de personas permitida: ");
                     //buscamos las habitaciones disponibles, las guardamos en un arreglo temporal
                     List<Habitacion>habitacionesDisponibles = sistema.listarHabitacionesDisponibles(fechaI,fechaF,cantidad);
 
@@ -78,6 +71,9 @@ public class MenuAdminstrador {
                 case 8:
                     sistema.listarEmpleados();
                     break;
+                case 9:
+                    //todo calcular total recuadado, y definir criterio
+                    //sistema.
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -92,8 +88,8 @@ public class MenuAdminstrador {
     public static Empleado solicitarDatosEmpleado() {
 
         Scanner in = new Scanner(System.in);
-        System.out.println("DNI: ");
-        String dni = in.nextLine();
+
+        String dni = InputUtils.leerDni(in,"DNI: ");
 
         System.out.print("Nombre: ");
         String nombre = in.nextLine();
@@ -104,8 +100,7 @@ public class MenuAdminstrador {
         System.out.println("Telefono: ");
         String telefono = in.nextLine();
 
-        System.out.print("Email: ");
-        String mail = in.nextLine();
+        String mail = InputUtils.leerMail(in,"Email: ");
 
         System.out.print("Password: ");
         String password = in.nextLine();
@@ -116,24 +111,19 @@ public class MenuAdminstrador {
     public static Habitacion solicitarDatosHabitacion(GestionHotel sistema){
         Scanner in = new Scanner(System.in);
 
-        //todo metodo que devuelva el ultimo id
-        int id = 0;
 
-        System.out.println("Piso: ");
-        int piso = in.nextInt();
+        int piso = InputUtils.leerEntero(in,"Piso: ");
 
-        System.out.print("Capacidad: ");
-        int capacidad = in.nextInt();
+        int capacidad = InputUtils.leerEntero(in,"Capacidad: ");
 
-        System.out.println("Precio por noche: ");
-        double precio = in.nextDouble();
+        double precio = InputUtils.leerDouble(in,"Precio por noche: ");
 
         System.out.println("Tipo: ");
         String tipo = in.nextLine();
 
         String motivo = null;
 
-        return new Habitacion(id,piso,capacidad,precio,tipo,motivo,EstadoHabitacion.LIBRE);
+        return new Habitacion(piso,capacidad,precio,tipo,motivo,EstadoHabitacion.LIBRE);
     }
 }
 

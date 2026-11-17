@@ -19,19 +19,24 @@ public class MenuPrincipal {
     }
 
     public void iniciarSesion() throws SQLException {
-        System.out.println("===Sistema Hotelero===");
-        System.out.println("Ingrese su mail: ");
-        String mail = in.nextLine();
-        System.out.println("Ingrese su contraseña: ");
-        String password = in.nextLine();
 
-        Usuario user = sistema.iniciarSesion(mail,password);
+        Usuario user;
+        do {
+            System.out.println("===Sistema Hotelero===");
+            System.out.println("Ingrese su mail: ");
+            String mail = in.nextLine();
 
+            System.out.println("Ingrese su contraseña: ");
+            String password = in.nextLine();
 
-        if(user == null){
-            System.out.println("Credenciales incorrectas");
+            user = sistema.iniciarSesion(mail, password);
 
-        }else{
+            if (user == null) {
+                System.out.println("Credenciales incorrectas");
+            }
+
+        } while (user == null);
+
             switch(user.getRol()){
                 case ADMINISTRADOR:
                    MenuAdminstrador.mostrar(sistema);
@@ -45,4 +50,4 @@ public class MenuPrincipal {
             }
         }
     }
-}
+

@@ -29,15 +29,27 @@ public class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
-    public Habitacion(int id, int piso, int capacidad, double precioXNoche, String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
+    //constructor para mapear desde BD
+    public Habitacion(int id,int piso, int capacidad, double precioXNoche, String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
         this.capacidad = capacidad;
-        this.estado = EstadoHabitacion.LIBRE;
         this.id = id;
+        this.estado = EstadoHabitacion.LIBRE;
         this.piso = piso;
         this.precioXnoche = precioXNoche;
         this.tipo = tipo;
         this.motivoNoDisponible =motivoNoDisponible;
         this.estado = estado;
+    }
+
+    //para cargar una habitacion nueva
+    public Habitacion(int piso, int capacidad, double precio, String tipo, String motivo, EstadoHabitacion estado) {
+        this.estado = EstadoHabitacion.LIBRE;
+        this.piso = piso;
+        this.precioXnoche = precio;
+        this.tipo = tipo;
+        this.capacidad = capacidad;
+        this.estado = estado;
+        this.motivoNoDisponible =motivo;
     }
 
     //Getter y Setter

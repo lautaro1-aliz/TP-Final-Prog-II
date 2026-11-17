@@ -15,12 +15,11 @@ import java.util.List;
 
 public class HabitacionDAO implements DAO<Habitacion> {
 
-    private static final String SQL_INSERTAR = " INSERT INTO habitaciones (codigo, tipo, nombre, piso, precio_por_noche, vista, "
-            + "estado, cantidad_camas, jacuzzi, capacidad_personas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_LISTAR = " SELECT * FROM habitaciones ORDER BY codigo";
-    private static final String SQL_BUSCAR = "SELECT * FROM habitaciones WHERE codigo = ?";
+    private static final String SQL_INSERTAR = " INSERT INTO habitaciones (piso, capacidad, estado, precio_x_noche, tipo, motivo_no_disponible) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_LISTAR = " SELECT * FROM habitaciones ORDER BY id";
+    private static final String SQL_BUSCAR = "SELECT * FROM habitaciones WHERE id = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE habitaciones SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
-    private static final String SQL_ELIMINAR = "DELETE FROM habitaciones WHERE codigo = ?";
+    private static final String SQL_ELIMINAR = "DELETE FROM habitaciones WHERE id = ?";
 
 
     @Override
@@ -41,6 +40,7 @@ public class HabitacionDAO implements DAO<Habitacion> {
 
     @Override
     public void insertar(Habitacion h) {
+        int filas = 0;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_INSERTAR)) {
             ps.setInt(1, h.getId());
@@ -50,6 +50,11 @@ public class HabitacionDAO implements DAO<Habitacion> {
             ps.setInt(5, h.getCapacidad());
             ps.setString(6, h.getEstado().name());
             ps.executeUpdate();
+            if(filas!=0){
+                System.out.println(" Habitacion insertada correctamente.");
+            }else{
+                throw new RuntimeException("Error al insertar la habitacion");
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

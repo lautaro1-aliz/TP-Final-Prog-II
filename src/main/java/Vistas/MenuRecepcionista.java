@@ -4,6 +4,7 @@ import Entidades.Empleado;
 import Entidades.Habitacion;
 import Entidades.Pasajero;
 import Gestores.GestionHotel;
+import InputUtils.InputUtils;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -19,15 +20,15 @@ public class MenuRecepcionista {
 
             int op;
             do {
-                System.out.println("===== MENU ADMINISTRADOR =====");
+                System.out.println("===== MENU RECEPCIONISTA =====");
                 System.out.println("1. Alta pasajero ");
                 System.out.println("2. Realizar check-in ");
                 System.out.println("3. Realizar check-out ");
                 System.out.println("4. Modificar reserva ");
-                System.out.println("5. ");
+                System.out.println("5. Ver reservas por habitacion ");
                 System.out.println("6. Listar habitaciones disponibles por fecha ");
-                System.out.println("7.  ");
-                System.out.println("8.  ");
+                System.out.println("7. Generar informe de pasajeros ");
+                System.out.println("8. Marcar habitacion no disponible ");
                 System.out.println("0. Salir ");
                 op = in.nextInt();
                 in.nextLine(); //limpio buffer
@@ -36,48 +37,32 @@ public class MenuRecepcionista {
                         sistema.agregarUsuario(solicitarDatosPasajero());
                         break;
                     case 2:
-                        System.out.println("Ingrese el nro de reserva: ");
-                        int id = in.nextInt();
+                        int id = InputUtils.leerEntero(in,"Ingrese el nro de reserva: ");
                         sistema.realizarCheckIn(id);
                         break;
                     case 3:
-                        System.out.println("Ingrese el nro de habitacion: ");
-                        int nro = in.nextInt();
+                        int nro = InputUtils.leerEntero(in,"Ingrese el nro de habitacion: ");
                         sistema.realizarCheckOut(nro);
                         break;
                     case 4:
-                        System.out.println("Ingrese el nro de la reserva: ");
-                        id = in.nextInt();
-                        System.out.println("Ingrese el nro de la nueva habitacion: ");
-                        nro = in.nextInt();
-                        System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
-                        String fechaTexto = in.nextLine();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        LocalDate fechaI = LocalDate.parse(fechaTexto, formatter);
 
-                        System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
-                        fechaTexto = in.nextLine();
-                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        LocalDate fechaF = LocalDate.parse(fechaTexto, formatter);
+                        id = InputUtils.leerEntero(in,"Ingrese el nro de la reserva: ");
+                        nro = InputUtils.leerEntero(in,"Ingrese el nro de la nueva habitacion: ");
+                        LocalDate fechaI = InputUtils.leerFecha(in,"Ingrese la fecha de inicio (dd/MM/yyyy): ");
+                        LocalDate fechaF = InputUtils.leerFecha(in,"Ingrese la fecha de fin (dd/MM/yyyy): ");
+
+                        //modificamos la reserva
                         sistema.modificarReserva(id,nro,fechaI,fechaF);
-
                         break;
                     case 5:
-
+                        id = InputUtils.leerEntero(in,"Ingrese el nro de la habitacion");
+                        sistema.listarReservasPorHabitacion(id);
                         break;
                     case 6:
-                        System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
-                        fechaTexto = in.nextLine();
-                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        fechaI = LocalDate.parse(fechaTexto, formatter);
+                        fechaI = InputUtils.leerFecha(in, "Ingrese la fecha de inicio: dd/MM/yyyy: ");
+                        fechaF = InputUtils.leerFecha(in,"Ingrese la fecha de fin:  dd/MM/yyyy: ");
+                        int cantidad = InputUtils.leerEntero(in, "Ingrese la cantidad de personas permitida: ");
 
-                        System.out.print("Ingrese la fecha de fin (dd/MM/yyyy): ");
-                        fechaTexto = in.nextLine();
-                        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        fechaF = LocalDate.parse(fechaTexto, formatter);
-
-                        System.out.println("Ingrese la capacidad maxima de la habitacion: ");
-                        int cantidad = in.nextInt();
                         //buscamos las habitaciones disponibles, las guardamos en un arreglo temporal
                         List<Habitacion> habitacionesDisponibles = sistema.listarHabitacionesDisponibles(fechaI,fechaF,cantidad);
 
@@ -87,10 +72,12 @@ public class MenuRecepcionista {
                         }
                         break;
                     case 7:
-
+                        sistema.generarInformePasajeros();
                         break;
                     case 8:
-
+                        id = InputUtils.leerEntero(in,"Ingrese el ID de la habitacion: ");
+                        String motivo = in.nextLine();
+                        sistema.marcarHabitacionNoDisponible(id,motivo);
                         break;
                     case 0:
                         System.out.println("Saliendo...");
