@@ -97,6 +97,22 @@ public class ReservaDAO implements DAO<Reserva> {
         return null;
     }
 
+    public Reserva buscarPorIdHabitacion(int id) {
+        String sql =" SELECT * FROM reservas WHERE id_habitacion = ? ";
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1,id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return mapear(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("No hay reservas para la habitacion nro"+id);
+        }
+        return null;
+    }
+
     @Override
     public void eliminar(int id) {
         int filas = 0;

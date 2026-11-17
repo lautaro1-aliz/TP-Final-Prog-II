@@ -39,7 +39,7 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion> {
 
 
     public Habitacion buscarHabitacion(int numero) {
-        return buscar(String.valueOf(numero));
+        return dao.buscarPorId(numero);
     }
 
     public boolean agregarHabitacion(Habitacion habitacion) {
@@ -121,5 +121,9 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion> {
 
     public void guardarEnBD(Habitacion h) throws SQLException {
         dao.insertar(h);
+    }
+
+    public void actualizar(Habitacion h){
+        dao.actualizar(h);
     }
 }

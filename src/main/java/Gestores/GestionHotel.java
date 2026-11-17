@@ -3,6 +3,7 @@ package Gestores;
 import Entidades.*;
 import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
+import Excepciones.ElementoNoEncontradoException;
 import dao.UsuarioDAO;
 
 import java.sql.SQLException;
@@ -217,6 +218,15 @@ public class GestionHotel {
 
     public boolean realizarCheckOut(int idHabitacion) {
         return empleados.realizarCheckOut(reservas, habitaciones, idHabitacion);
+    }
+
+    public void actualizarPrecioHabitacion(double precio,int id){
+        Habitacion h = habitaciones.buscarHabitacion(id);
+        if(h==null){
+            throw new ElementoNoEncontradoException("No hay habitacion con el ID indicado");
+        }
+        h.setPrecioXnoche(precio);
+        habitaciones.actualizar(h);
     }
 
     public boolean confirmarReserva(int idReserva) {

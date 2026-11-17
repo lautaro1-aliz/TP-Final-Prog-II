@@ -4,6 +4,7 @@ import Entidades.Habitacion;
 import Entidades.Reserva;
 import Enums.EstadoHabitacion;
 import Enums.EstadoReserva;
+import Excepciones.ElementoNoEncontradoException;
 import Interfaces.DAO;
 import dao.ReservaDAO;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class GestorReservas extends GestorGenerico<Reserva> {
 
-    final DAO<Reserva> dao = new ReservaDAO();
+    private ReservaDAO dao = new ReservaDAO();
 
     public boolean tieneReservasActivas(int idHabitacion) {
         for (Reserva reserva : listar()) {
@@ -134,11 +135,14 @@ public class GestorReservas extends GestorGenerico<Reserva> {
 
         List<Reserva> resultado = new ArrayList<>();
 
-        for (Reserva reserva : listar()) {
+        for (Reserva reserva : elementos) {
 
             if (reserva.getHabitacion() != null && reserva.getHabitacion().getId() == idHabitacion) {
-                resultado.add(reserva);
+                resultado.add(dao.buscarPorIdHabitacion(idHabitacion));
             }
+        }
+        if(resultado.isEmpty()){
+            throw new ElementoNoEncontradoException("No existen reservas para el ID de habitacion: "+idHabitacion);
         }
 
         return resultado;

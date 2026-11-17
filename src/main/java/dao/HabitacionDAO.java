@@ -18,7 +18,7 @@ public class HabitacionDAO implements DAO<Habitacion> {
     private static final String SQL_INSERTAR = " INSERT INTO habitaciones (piso, capacidad, estado, precio_x_noche, tipo, motivo_no_disponible) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_LISTAR = " SELECT * FROM habitaciones ORDER BY id";
     private static final String SQL_BUSCAR = "SELECT * FROM habitaciones WHERE id = ?";
-    private static final String SQL_ACTUALIZAR = "UPDATE habitaciones SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
+    private static final String SQL_ACTUALIZAR = "UPDATE habitaciones SET precio_x_noche = ? WHERE id = ?";
     private static final String SQL_ELIMINAR = "DELETE FROM habitaciones WHERE id = ?";
 
 
@@ -27,15 +27,16 @@ public class HabitacionDAO implements DAO<Habitacion> {
         int filas = 0;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)) {
-            //TODO ver que queremos actualizar de una habitacion
-            filas = ps.executeUpdate();
+                ps.setDouble(1,h.getPrecioXnoche());
+                ps.setInt(2,h.getId());
+                filas = ps.executeUpdate();
+            if (filas != 0) {
+                System.out.println("Precio actualizado correctamente");
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("No hay habitacion con el ID indicado",e);
         }
-        if (filas == 0) {
-            //TODO añadir excepciones
-            System.out.println("No hay coincidencias");
-        }
+
     }
 
     @Override
@@ -56,7 +57,7 @@ public class HabitacionDAO implements DAO<Habitacion> {
                 throw new RuntimeException("Error al insertar la habitacion");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("Error al insertar la habitación con id " + h.getId(), e);
         }
     }
 
@@ -85,10 +86,9 @@ public class HabitacionDAO implements DAO<Habitacion> {
                 if(rs.next()) {
                     return crearHabitacion(rs);
                 }
-               //TODO añadir excepcion
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException("Error al buscar habitación con id " + id, e);
         }
         return null;
     }
@@ -101,11 +101,10 @@ public class HabitacionDAO implements DAO<Habitacion> {
             ps.setInt(1, id);
             filas = ps.executeUpdate();
             if(filas == 0){
-                // TODO añadir excepciones
                 System.out.println("No hay coincidencias");
             }
         }catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new RuntimeException("Error al eliminar la habitación con id " + id, e);
         }
     }
 

@@ -3,6 +3,7 @@ package Vistas;
 import Entidades.Empleado;
 import Entidades.Habitacion;
 import Entidades.Pasajero;
+import Excepciones.ElementoNoEncontradoException;
 import Gestores.GestionHotel;
 import InputUtils.InputUtils;
 
@@ -29,6 +30,7 @@ public class MenuRecepcionista {
                 System.out.println("6. Listar habitaciones disponibles por fecha ");
                 System.out.println("7. Generar informe de pasajeros ");
                 System.out.println("8. Marcar habitacion no disponible ");
+                System.out.println("9. Actualizar precio habitacion ");
                 System.out.println("0. Salir ");
                 op = in.nextInt();
                 in.nextLine(); //limpio buffer
@@ -55,8 +57,12 @@ public class MenuRecepcionista {
                         sistema.modificarReserva(id,nro,fechaI,fechaF);
                         break;
                     case 5:
-                        id = InputUtils.leerEntero(in,"Ingrese el nro de la habitacion");
+                        try{
+                        id = InputUtils.leerEntero(in,"Ingrese el nro de la habitacion: ");
                         sistema.listarReservasPorHabitacion(id);
+                        }catch (ElementoNoEncontradoException e){
+                            System.out.println(e.getMessage());
+                        }
                         break;
                     case 6:
                         fechaI = InputUtils.leerFecha(in, "Ingrese la fecha de inicio: dd/MM/yyyy: ");
@@ -79,6 +85,16 @@ public class MenuRecepcionista {
                         String motivo = in.nextLine();
                         sistema.marcarHabitacionNoDisponible(id,motivo);
                         break;
+                    case 9:
+                        try{
+                        double precio = InputUtils.leerDouble(in,"Ingrese el nuevo precio de la habitacion (por noche): ");
+                        id = InputUtils.leerEntero(in,"Ingrese el ID de la habitacion a actualizar: ");
+                        sistema.actualizarPrecioHabitacion(precio,id);
+                        }catch (ElementoNoEncontradoException e){
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+
                     case 0:
                         System.out.println("Saliendo...");
                         break;
