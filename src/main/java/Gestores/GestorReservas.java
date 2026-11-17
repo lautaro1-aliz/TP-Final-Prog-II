@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GestorReservas extends GestorGenerico<Reserva> {
 
-    final DAO<Reserva> dao = new ReservaDAO();
+    private final ReservaDAO dao = new ReservaDAO();
 
     public boolean tieneReservasActivas(int idHabitacion) {
         for (Reserva reserva : listar()) {
@@ -159,24 +159,38 @@ public class GestorReservas extends GestorGenerico<Reserva> {
     }
 
     public boolean iniciarEstadia(int idReserva) {
+
         Reserva reserva = buscarReserva(idReserva);
 
-        if (reserva == null || reserva.getEstado() != EstadoReserva.CONFIRMADA) {
+        if (reserva == null ||
+                reserva.getEstado() != EstadoReserva.CONFIRMADA) {
+            return false;
+        }
+
+        if (!dao.actualizarEstado(idReserva, EstadoReserva.EN_CURSO)) {
             return false;
         }
 
         reserva.setEstado(EstadoReserva.EN_CURSO);
+
         return true;
     }
 
     public boolean finalizarEstadia(int idReserva) {
+
         Reserva reserva = buscarReserva(idReserva);
 
-        if (reserva == null || reserva.getEstado() != EstadoReserva.EN_CURSO) {
+        if (reserva == null ||
+                reserva.getEstado() != EstadoReserva.EN_CURSO) {
+            return false;
+        }
+
+        if (!dao.actualizarEstado(idReserva, EstadoReserva.FINALIZADA)) {
             return false;
         }
 
         reserva.setEstado(EstadoReserva.FINALIZADA);
+
         return true;
     }
 

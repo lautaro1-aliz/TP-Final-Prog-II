@@ -207,12 +207,16 @@ public class GestionHotel {
         return true;
     }
 
-    public boolean realizarCheckIn(int idReserva) {
-        return empleados.realizarCheckIn(reservas, habitaciones, idReserva);
+    public boolean realizarCheckIn(Empleado empleado, int idReserva) {
+        return empleados.realizarCheckIn(
+                empleado, reservas, habitaciones, idReserva
+        );
     }
 
-    public boolean realizarCheckOut(int idHabitacion) {
-        return empleados.realizarCheckOut(reservas, habitaciones, idHabitacion);
+    public boolean realizarCheckOut(Empleado empleado, int idHabitacion) {
+        return empleados.realizarCheckOut(
+                empleado, reservas, habitaciones, idHabitacion
+        );
     }
 
     public boolean confirmarReserva(int idReserva) {

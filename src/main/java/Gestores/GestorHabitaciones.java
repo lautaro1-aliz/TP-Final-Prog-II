@@ -77,26 +77,41 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
     }
 
     public boolean checkIn(int idHabitacion) {
+
         Habitacion habitacion = buscarHabitacion(idHabitacion);
 
-        if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.LIBRE) {
+        if (habitacion == null ||
+                habitacion.getEstado() != EstadoHabitacion.LIBRE) {
+            return false;
+        }
+
+        if (!dao.actualizarEstado(idHabitacion, EstadoHabitacion.OCUPADA)) {
             return false;
         }
 
         habitacion.setEstado(EstadoHabitacion.OCUPADA);
+
         return true;
     }
 
     public boolean checkOut(int idHabitacion) {
+
         Habitacion habitacion = buscarHabitacion(idHabitacion);
 
-        if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.OCUPADA) {
+        if (habitacion == null ||
+                habitacion.getEstado() != EstadoHabitacion.OCUPADA) {
+            return false;
+        }
+
+        if (!dao.actualizarEstado(idHabitacion, EstadoHabitacion.LIBRE)) {
             return false;
         }
 
         habitacion.setEstado(EstadoHabitacion.LIBRE);
+
         return true;
     }
+    
     public  void guardarBD() throws SQLException {
         int guardadas= 0;
         for(Habitacion h: elementos){

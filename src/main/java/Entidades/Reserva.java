@@ -31,12 +31,12 @@ public class Reserva implements Identificable {
         this.habitacion = habitacion;
     }
 
-    public Reserva(LocalDate fechaInicio, LocalDate fechaFin,Habitacion h,Pasajero p) {
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion h, Pasajero p) {
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.usuario = p;
         this.habitacion = h;
-
+        this.estado = EstadoReserva.PENDIENTE;
     }
 
     public int getId() {

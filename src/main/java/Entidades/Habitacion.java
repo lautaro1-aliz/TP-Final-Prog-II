@@ -29,14 +29,20 @@ public class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
-    public Habitacion(int id, int piso, int capacidad, double precioXNoche, String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
-        this.capacidad = capacidad;
-        this.estado = EstadoHabitacion.LIBRE;
+    public Habitacion(int id, int piso, int capacidad, double precioXNoche,
+                      String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
+
         this.id = id;
+
+        if (id >= contador) {
+            contador = id + 1;
+        }
+
         this.piso = piso;
+        this.capacidad = capacidad;
         this.precioXnoche = precioXNoche;
         this.tipo = tipo;
-        this.motivoNoDisponible =motivoNoDisponible;
+        this.motivoNoDisponible = motivoNoDisponible;
         this.estado = estado;
     }
 

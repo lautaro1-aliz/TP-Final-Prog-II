@@ -1,10 +1,13 @@
 package Vistas;
 
+import Entidades.Habitacion;
 import Entidades.Usuario;
 import Gestores.GestionHotel;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuPasajero {
@@ -29,7 +32,7 @@ public class MenuPasajero {
                     case 1:
                         System.out.println("Ingrese la nueva contraseña: ");
 
-                        String pass =in.nextLine();
+                        String pass = in.nextLine();
                         u.setPassword(pass);
                         System.out.println(u.toString());
                         sistema.cambiarContrasenia(u);
@@ -68,7 +71,10 @@ public class MenuPasajero {
                         System.out.println("Ingrese la capacidad de la habitacion: ");
                         int capacidad = in.nextInt();
 
-                        sistema.listarHabitacionesDisponibles(fechaI,fechaF,capacidad);
+                        List<Habitacion> aux = sistema.listarHabitacionesDisponibles(fechaI,fechaF,capacidad);
+                        for (Habitacion hab : aux) {
+                            System.out.println(hab.toString());
+                        }
                         break;
                     case 0:
                         System.out.println("Saliendo...");

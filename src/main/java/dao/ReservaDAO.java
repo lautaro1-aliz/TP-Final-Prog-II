@@ -131,4 +131,22 @@ public class ReservaDAO implements DAO<Reserva> {
                             EstadoReserva.valueOf(rs.getString("estado_reserva").toUpperCase()),
                             usuario,habitacion);
     }
+
+    public boolean actualizarEstado(int idReserva, EstadoReserva estado) {
+
+        String sql = "UPDATE reservas SET estado = ? WHERE id = ?";
+
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, estado.name());
+            ps.setInt(2, idReserva);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar reserva: " + e.getMessage());
+            return false;
+        }
+    }
 }

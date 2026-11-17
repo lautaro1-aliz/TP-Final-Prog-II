@@ -6,6 +6,8 @@ import Enums.Rol;
 import dao.UsuarioDAO;
 import Entidades.Reserva;
 import Enums.EstadoReserva;
+import Entidades.Habitacion;
+import Enums.EstadoHabitacion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,28 +16,62 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
     private final UsuarioDAO dao  = new UsuarioDAO();
 
-    public boolean realizarCheckIn(GestorReservas reservas, GestorHabitaciones habitaciones, int idReserva) {
+    public boolean realizarCheckIn(Empleado empleado,
+                                   GestorReservas reservas,
+                                   GestorHabitaciones habitaciones,
+                                   int idReserva) {
 
-        if (reservas == null || habitaciones == null) return false;
-
-        if (!reservas.validarCheckIn(idReserva)) return false;
-
-        Reserva reserva = reservas.buscarReserva(idReserva);
-
-        if (!habitaciones.checkIn(reserva.getHabitacion().getId())) {
+        if (empleado == null || empleado.getRol() != Rol.EMPLEADO) {
             return false;
         }
 
-        return reservas.iniciarEstadia(idReserva);
+        if (reservas == null || habitaciones == null) {
+            return false;
+        }
+
+        if (!reservas.validarCheckIn(idReserva)) {
+            return false;
+        }
+
+        Reserva reserva = reservas.buscarReserva(idReserva);
+
+        int idHabitacion = reserva.getHabitacion().getId();
+
+        // Ocupamos la habitación
+        if (!habitaciones.checkIn(idHabitacion)) {
+            return false;
+        }
+
+        // Iniciamos la estadía
+        if (!reservas.iniciarEstadia(idReserva)) {
+
+            // Si falla, revertimos la habitación
+            habitaciones.checkOut(idHabitacion);
+
+            return false;
+        }
+
+        return true;
     }
 
-    public boolean realizarCheckOut(GestorReservas reservas,
+    public boolean realizarCheckOut(Empleado empleado,
+                                    GestorReservas reservas,
                                     GestorHabitaciones habitaciones,
                                     int idHabitacion) {
 
-        if (reservas == null || habitaciones == null) return false;
+        if (empleado == null || empleado.getRol() != Rol.EMPLEADO) {
+            return false;
+        }
 
-        if (habitaciones.buscarHabitacion(idHabitacion) == null) return false;
+        if (reservas == null || habitaciones == null) {
+            return false;
+        }
+
+        Habitacion habitacion = habitaciones.buscarHabitacion(idHabitacion);
+
+        if (habitacion == null || habitacion.getEstado() != EstadoHabitacion.OCUPADA) {
+            return false;
+        }
 
         Reserva reservaEnCurso = null;
 
@@ -46,11 +82,25 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
             }
         }
 
-        if (reservaEnCurso == null) return false;
+        if (reservaEnCurso == null) {
+            return false;
+        }
 
-        if (!habitaciones.checkOut(idHabitacion)) return false;
+        // Liberamos la habitación
+        if (!habitaciones.checkOut(idHabitacion)) {
+            return false;
+        }
 
-        return reservas.finalizarEstadia(reservaEnCurso.getId());
+        // Finalizamos la estadía
+        if (!reservas.finalizarEstadia(reservaEnCurso.getId())) {
+
+            // Si falla, volvemos a ocupar la habitación
+            habitaciones.checkIn(idHabitacion);
+
+            return false;
+        }
+
+        return true;
     }
 
 

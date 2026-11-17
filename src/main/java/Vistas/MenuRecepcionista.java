@@ -14,20 +14,17 @@ import java.util.Scanner;
 public class MenuRecepcionista {
 
 
-        public static void mostrar(GestionHotel sistema) throws SQLException {
+    public static void mostrar(GestionHotel sistema, Empleado empleado) throws SQLException{
             Scanner in = new Scanner(System.in);
 
             int op;
             do {
-                System.out.println("===== MENU ADMINISTRADOR =====");
+                System.out.println("===== MENU EMPLEADO =====");
                 System.out.println("1. Alta pasajero ");
                 System.out.println("2. Realizar check-in ");
                 System.out.println("3. Realizar check-out ");
                 System.out.println("4. Modificar reserva ");
-                System.out.println("5. ");
-                System.out.println("6. Listar habitaciones disponibles por fecha ");
-                System.out.println("7.  ");
-                System.out.println("8.  ");
+                System.out.println("5. Listar habitaciones disponibles por fecha ");
                 System.out.println("0. Salir ");
                 op = in.nextInt();
                 in.nextLine(); //limpio buffer
@@ -38,12 +35,12 @@ public class MenuRecepcionista {
                     case 2:
                         System.out.println("Ingrese el nro de reserva: ");
                         int id = in.nextInt();
-                        sistema.realizarCheckIn(id);
+                        sistema.realizarCheckIn(empleado, id);
                         break;
                     case 3:
                         System.out.println("Ingrese el nro de habitacion: ");
                         int nro = in.nextInt();
-                        sistema.realizarCheckOut(nro);
+                        sistema.realizarCheckOut(empleado, nro);
                         break;
                     case 4:
                         System.out.println("Ingrese el nro de la reserva: ");
@@ -63,9 +60,6 @@ public class MenuRecepcionista {
 
                         break;
                     case 5:
-
-                        break;
-                    case 6:
                         System.out.print("Ingrese la fecha de inicio (dd/MM/yyyy): ");
                         fechaTexto = in.nextLine();
                         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
