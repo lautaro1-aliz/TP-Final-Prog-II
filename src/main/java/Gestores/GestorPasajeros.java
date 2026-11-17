@@ -63,7 +63,7 @@ public class GestorPasajeros extends GestorGenerico<Pasajero> {
     }
 
     public void actualizarPass(Usuario u){
-        dao.actualizar(u);
+        dao.actualizarPassword(u);
     }
 
     public void guardarEnBD(Pasajero p) throws SQLException {

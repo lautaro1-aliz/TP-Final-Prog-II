@@ -34,8 +34,9 @@ public class MenuPasajero {
 
                         String pass = in.nextLine();
                         u.setPassword(pass);
-                        System.out.println(u.toString());
                         sistema.cambiarContrasenia(u);
+                        System.out.println("Contrasena cambiada exitosamente");
+
                         break;
                     case 2:
                         System.out.println("Ingrese el id de la habitacion que desea reservar: ");

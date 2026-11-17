@@ -21,6 +21,7 @@ public class UsuarioDAO implements DAO<Usuario> {
     private static final String SQL_LISTAR = "SELECT * FROM usuarios WHERE rol = ? ORDER BY id";
     private static final String SQL_BUSCAR = "SELECT * FROM usuarios WHERE id = ?";
     private static final String SQL_ACTUALIZAR = "UPDATE usuarios SET mail = ?, password = ? WHERE dni =  ?";
+    private static final String SQL_ACTUALIZAR_PASSWORD = "UPDATE usuarios SET password = ? WHERE dni = ?";
     private static final String SQL_ELIMINAR = "DELETE FROM usuarios WHERE id = ?";
     @Override
     public void insertar(Usuario u) {
@@ -86,18 +87,35 @@ public class UsuarioDAO implements DAO<Usuario> {
     @Override
     public void actualizar(Usuario u) {
         int filas = 0;
-        try(Connection con = ConexionBD.getConexion();
-            PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)){
-            ps.setString(1,u.getMail());
-            ps.setString(2,u.getPassword());
-            ps.setString(1,u.getDNI());
+
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)) {
+
+            ps.setString(1, u.getMail());
+            ps.setString(2, u.getPassword());
+            ps.setString(3, u.getDNI());
+
             filas = ps.executeUpdate();
-            if(filas!=0){
+
+            if (filas != 0) {
                 System.out.println("Cambios realizados correctamente");
-            }else{
-                //todo añadir excepcion
-                System.out.println("No hay usuario registrado con ese dni");
+            } else {
+                System.out.println("No hay usuario registrado con ese DNI");
             }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean actualizarPassword(Usuario u) {
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR_PASSWORD)) {
+
+            ps.setString(1, u.getPassword());
+            ps.setString(2, u.getDNI());
+
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
