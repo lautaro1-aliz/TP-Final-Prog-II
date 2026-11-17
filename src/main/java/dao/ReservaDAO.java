@@ -20,7 +20,7 @@ public class ReservaDAO implements DAO<Reserva> {
     private static final String SQL_INSERTAR = "INSERT INTO reservas (fecha_I,fecha_F,id_usuario,id_habitacion,estado) VALUES (?, ?, ?, ?,?)";
     private static final String SQL_LISTAR = "SELECT * FROM reservas ORDER BY id";
     private static final String SQL_BUSCAR = "SELECT * FROM reservas WHERE id = ?";
-    private static final String SQL_ACTUALIZAR = "UPDATE reservas SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
+    private static final String SQL_ACTUALIZAR = "UPDATE reservas SET precio_por_noche = ?, estado = ? WHERE id = ?";
     private static final String SQL_ELIMINAR = "DELETE FROM reservas WHERE id = ?";
 
     @Override
@@ -97,6 +97,22 @@ public class ReservaDAO implements DAO<Reserva> {
         return null;
     }
 
+    public Reserva buscarPorIdHabitacion(int id) {
+        String sql =" SELECT * FROM reservas WHERE id_habitacion = ? ";
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1,id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return mapear(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("No hay reservas para la habitacion nro"+id);
+        }
+        return null;
+    }
+
     @Override
     public void eliminar(int id) {
         int filas = 0;
@@ -118,17 +134,17 @@ public class ReservaDAO implements DAO<Reserva> {
 
         //busco el usuario segun el id en la base de datos
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        Usuario usuario = usuarioDAO.buscarPorId(rs.getInt("id_usuario"));
+        Usuario usuario = usuarioDAO.buscarPorId(rs.getInt("usuario_id"));
 
         //busco la habitacion segun id en base de datos
         HabitacionDAO habitacionDAO = new HabitacionDAO();
-        Habitacion habitacion = habitacionDAO.buscarPorId(rs.getInt("id_habitacion"));
+        Habitacion habitacion = habitacionDAO.buscarPorId(rs.getInt("habitacion_id"));
 
         //mapeo las columnas faltantes y paso como parametro los objetos obtenidos
         return new Reserva(rs.getInt("id"),
-                            rs.getDate("fecha_I").toLocalDate(),
-                            rs.getDate("Fecha_F").toLocalDate(),
-                            EstadoReserva.valueOf(rs.getString("estado_reserva").toUpperCase()),
+                            rs.getDate("fecha_inicio").toLocalDate(),
+                            rs.getDate("Fecha_fin").toLocalDate(),
+                            EstadoReserva.valueOf(rs.getString("estado").toUpperCase()),
                             usuario,habitacion);
     }
 

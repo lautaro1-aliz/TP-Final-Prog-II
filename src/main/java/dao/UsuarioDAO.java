@@ -159,7 +159,6 @@ public class UsuarioDAO implements DAO<Usuario> {
                     rs.getString("mail"),
                     rs.getString("password"));
         }
-        System.out.println("Creando pasajero");
         return new Pasajero(
                 rs.getString("nombre"),
                 rs.getString("apellido"),

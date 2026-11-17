@@ -15,38 +15,27 @@ import java.util.List;
 
 public class HabitacionDAO implements DAO<Habitacion> {
 
-    private static final String SQL_INSERTAR =
-            "INSERT INTO habitaciones (piso, capacidad, estado, precio_x_noche, tipo, motivo_no_disponible) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERTAR = " INSERT INTO habitaciones (codigo, tipo, nombre, piso, precio_por_noche, vista, "
+            + "estado, cantidad_camas, jacuzzi, capacidad_personas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_LISTAR = " SELECT * FROM habitaciones ORDER BY codigo";
+    private static final String SQL_BUSCAR = "SELECT * FROM habitaciones WHERE codigo = ?";
+    private static final String SQL_ACTUALIZAR = "UPDATE habitaciones SET precio_por_noche = ?, estado = ? WHERE codigo = ?";
+    private static final String SQL_ELIMINAR = "DELETE FROM habitaciones WHERE codigo = ?";
 
-    private static final String SQL_LISTAR =
-            "SELECT * FROM habitaciones ORDER BY id";
-
-    private static final String SQL_BUSCAR =
-            "SELECT * FROM habitaciones WHERE id = ?";
-
-    private static final String SQL_ACTUALIZAR =
-            "UPDATE habitaciones SET precio_x_noche = ?, estado = ? WHERE id = ?";
-
-    private static final String SQL_ELIMINAR =
-            "DELETE FROM habitaciones WHERE id = ?";
 
     @Override
     public void actualizar(Habitacion h) {
+        int filas = 0;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_ACTUALIZAR)) {
-
-            ps.setDouble(1, h.getPrecioXnoche());
-            ps.setString(2, h.getEstado().name());
-            ps.setInt(3, h.getId());
-
-            int filas = ps.executeUpdate();
-
-            if (filas == 0) {
-                System.out.println("No se encontró la habitación.");
-            }
-
+            //TODO ver que queremos actualizar de una habitacion
+            filas = ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error al actualizar habitación: " + e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        if (filas == 0) {
+            //TODO añadir excepciones
+            System.out.println("No hay coincidencias");
         }
     }
 
@@ -54,18 +43,15 @@ public class HabitacionDAO implements DAO<Habitacion> {
     public void insertar(Habitacion h) {
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_INSERTAR)) {
-
-            ps.setInt(1, h.getPiso());
-            ps.setInt(2, h.getCapacidad());
-            ps.setString(3, h.getEstado().name());
+            ps.setInt(1, h.getId());
+            ps.setInt(2,h.getPiso());
+            ps.setString(3, h.getTipo());
             ps.setDouble(4, h.getPrecioXnoche());
-            ps.setString(5, h.getTipo());
-            ps.setString(6, h.getMotivoNoDisponible());
-
+            ps.setInt(5, h.getCapacidad());
+            ps.setString(6, h.getEstado().name());
             ps.executeUpdate();
-
         } catch (SQLException e) {
-            System.out.println("Error al insertar habitación: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -86,45 +72,35 @@ public class HabitacionDAO implements DAO<Habitacion> {
 
     @Override
     public Habitacion buscarPorId(int id) {
-
         /// ejecuta la query y si encontro lo buscado lo mapea y retorna
         /// añadi excepcion ElementoNoEncontrado para informar al usuario si no existe la habitacion
-
-        try (Connection con = ConexionBD.getConexion();
-             PreparedStatement ps = con.prepareStatement(SQL_BUSCAR)) {
-
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+        try(PreparedStatement ps = ConexionBD.getConexion().prepareStatement(SQL_BUSCAR)) {
+            ps.setInt(1,id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()) {
                     return crearHabitacion(rs);
                 }
+               //TODO añadir excepcion
             }
-
         } catch (SQLException e) {
-            System.out.println("Error al buscar habitación: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
-
         return null;
     }
 
     @Override
     public void eliminar(int id) {
+        int filas;
         try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(SQL_ELIMINAR)) {
-
             ps.setInt(1, id);
-
-            int filas = ps.executeUpdate();
-
-            if (filas == 0) {
-                System.out.println("No se encontró la habitación.");
-            } else {
-                System.out.println("Habitación eliminada correctamente.");
+            filas = ps.executeUpdate();
+            if(filas == 0){
+                // TODO añadir excepciones
+                System.out.println("No hay coincidencias");
             }
-
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar habitación: " + e.getMessage());
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -144,24 +120,6 @@ public class HabitacionDAO implements DAO<Habitacion> {
             System.out.println(e.getMessage());
         }
         return lista;
-    }
-
-    public boolean actualizarEstado(int id, EstadoHabitacion estado) {
-
-        String sql = "UPDATE habitaciones SET estado = ? WHERE id = ?";
-
-        try (Connection con = ConexionBD.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, estado.name());
-            ps.setInt(2, id);
-
-            return ps.executeUpdate() > 0;
-
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar habitación: " + e.getMessage());
-            return false;
-        }
     }
 
     private Habitacion crearHabitacion(ResultSet rs) throws SQLException {

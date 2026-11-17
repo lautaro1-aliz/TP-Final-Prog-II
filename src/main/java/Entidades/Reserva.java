@@ -115,4 +115,17 @@ public class Reserva implements Identificable {
                 estado == EstadoReserva.CONFIRMADA ||
                 estado == EstadoReserva.EN_CURSO;
     }
+
+
+    @Override
+    public String toString() {
+        return "Reserva: " +
+                " | ID :" + id +
+                " | Fecha inicio: " + fechaInicio +
+                " | Fecha fin: " + fechaFin +
+                " | Estado: " + estado +
+                " | Pasajero: " + usuario.getNombre().concat(" ").concat(getUsuario().getApellido()) +
+                " | Habitacion: " + habitacion.getId() +
+                '|';
+    }
 }
