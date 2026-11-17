@@ -108,22 +108,17 @@ public class MenuAdminstrador {
         return new Empleado(dni,nombre,apellido,telefono, mail,password);
     }
 
-    public static Habitacion solicitarDatosHabitacion(GestionHotel sistema){
+    public static Habitacion solicitarDatosHabitacion(GestionHotel sistema) {
         Scanner in = new Scanner(System.in);
 
-
-        int piso = InputUtils.leerEntero(in,"Piso: ");
-
-        int capacidad = InputUtils.leerEntero(in,"Capacidad: ");
-
-        double precio = InputUtils.leerDouble(in,"Precio por noche: ");
+        int piso = InputUtils.leerEntero(in, "Piso: ");
+        int capacidad = InputUtils.leerEntero(in, "Capacidad: ");
+        double precio = InputUtils.leerDouble(in, "Precio por noche: ");
 
         System.out.println("Tipo: ");
         String tipo = in.nextLine();
 
-        String motivo = null;
-
-        return new Habitacion(piso,capacidad,precio,tipo,motivo,EstadoHabitacion.LIBRE);
+        return new Habitacion(piso, capacidad, precio, tipo);
     }
 }
 

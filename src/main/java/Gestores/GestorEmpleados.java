@@ -14,7 +14,12 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
     private final UsuarioDAO dao  = new UsuarioDAO();
 
-    public boolean realizarCheckIn(GestorReservas reservas, GestorHabitaciones habitaciones, int idReserva) {
+    public boolean realizarCheckIn(Empleado empleado,
+                                   GestorReservas reservas,
+                                   GestorHabitaciones habitaciones,
+                                   int idReserva) {
+
+        if (empleado == null || empleado.getRol() != Rol.EMPLEADO) return false;
 
         if (reservas == null || habitaciones == null) return false;
 
@@ -26,12 +31,20 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
             return false;
         }
 
-        return reservas.iniciarEstadia(idReserva);
+        if (!reservas.iniciarEstadia(idReserva)) {
+            habitaciones.checkOut(reserva.getHabitacion().getId());
+            return false;
+        }
+
+        return true;
     }
 
-    public boolean realizarCheckOut(GestorReservas reservas,
+    public boolean realizarCheckOut(Empleado empleado,
+                                    GestorReservas reservas,
                                     GestorHabitaciones habitaciones,
                                     int idHabitacion) {
+
+        if (empleado == null || empleado.getRol() != Rol.EMPLEADO) return false;
 
         if (reservas == null || habitaciones == null) return false;
 
@@ -50,7 +63,12 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
         if (!habitaciones.checkOut(idHabitacion)) return false;
 
-        return reservas.finalizarEstadia(reservaEnCurso.getId());
+        if (!reservas.finalizarEstadia(reservaEnCurso.getId())) {
+            habitaciones.checkIn(idHabitacion);
+            return false;
+        }
+
+        return true;
     }
 
 

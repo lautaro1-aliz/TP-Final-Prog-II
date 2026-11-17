@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class MenuRecepcionista {
 
 
-        public static void mostrar(GestionHotel sistema) throws SQLException {
+    public static void mostrar(GestionHotel sistema, Empleado empleado) throws SQLException {
             Scanner in = new Scanner(System.in);
 
             int op;
@@ -38,12 +38,12 @@ public class MenuRecepcionista {
                     case 2:
                         System.out.println("Ingrese el nro de reserva: ");
                         int id = in.nextInt();
-                        sistema.realizarCheckIn(id);
+                        sistema.realizarCheckIn(empleado, id);
                         break;
                     case 3:
                         System.out.println("Ingrese el nro de habitacion: ");
                         int nro = in.nextInt();
-                        sistema.realizarCheckOut(nro);
+                        sistema.realizarCheckOut(empleado, nro);
                         break;
                     case 4:
                         System.out.println("Ingrese el nro de la reserva: ");
