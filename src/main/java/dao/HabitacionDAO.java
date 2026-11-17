@@ -2,6 +2,8 @@ package dao;
 
 import ConexionBD.ConexionBD;
 import Entidades.Habitacion;
+import Enums.EstadoHabitacion;
+import Enums.EstadoReserva;
 import Interfaces.DAO;
 
 import java.sql.Connection;
@@ -102,29 +104,31 @@ public class HabitacionDAO implements DAO<Habitacion> {
         }
     }
 
+    public List<Habitacion> listarPorEstado(EstadoHabitacion estado) {
+        List<Habitacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM habitaciones WHERE estado = ?";
+        try (Connection con = ConexionBD.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql))
+        {
+            ps.setString(1,estado.name());
+            try(ResultSet rs = ps.executeQuery()){
+            while (rs.next()) {
+                lista.add(crearHabitacion(rs));
+            }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return lista;
+    }
 
     private Habitacion crearHabitacion(ResultSet rs) throws SQLException {
-        String tipo = rs.getString("tipo");
-        String codigo = rs.getString("codigo");
-        String nombre = rs.getString("nombre");
-        int piso = rs.getInt("piso");
-        double precio = rs.getDouble("precio_por_noche");
-
-        //TODO ver si finalmente dejamos Habitacion como abstracta para definir esta parte
-//        switch (tipo) {
-//            case "SIMPLE":
-//                h = new HabitacionSimple(codigo, nombre, piso, precio, vista, rs.getInt("cantidad_camas"));
-//                break;
-//            case "SUITE":
-//                h = new Suite(codigo, nombre, piso, precio, vista, rs.getBoolean("jacuzzi"));
-//                break;
-//            case "CABANA":
-//                h = new Cabana(codigo, nombre, piso, precio, vista, rs.getInt("capacidad_personas"));
-//                break;
-//            default:
-//                throw new SQLException("Tipo de habitación desconocido: " + tipo);
-//        }
-//        h.setEstado(EstadoHabitacion.valueOf(rs.getString("estado")));
-        return null;
+        return new Habitacion(rs.getInt("id"),
+                            rs.getInt("piso"),
+                            rs.getInt("capacidad"),
+                            rs.getDouble("precio_x_noche"),
+                            rs.getString("tipo"),
+                            rs.getString("motivo_no_disponible"),
+                            EstadoHabitacion.valueOf(rs.getString("estado")));
     }
 }

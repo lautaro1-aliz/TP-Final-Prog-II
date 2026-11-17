@@ -29,6 +29,17 @@ public class Habitacion implements Identificable{
         this.tipo = tipo;
     }
 
+    public Habitacion(int id, int piso, int capacidad, double precioXNoche, String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
+        this.capacidad = capacidad;
+        this.estado = EstadoHabitacion.LIBRE;
+        this.id = id;
+        this.piso = piso;
+        this.precioXnoche = precioXNoche;
+        this.tipo = tipo;
+        this.motivoNoDisponible =motivoNoDisponible;
+        this.estado = estado;
+    }
+
     //Getter y Setter
 
 

@@ -14,9 +14,7 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
     private final UsuarioDAO dao  = new UsuarioDAO();
 
-    public boolean realizarCheckIn(GestorReservas reservas,
-                                   GestorHabitaciones habitaciones,
-                                   int idReserva) {
+    public boolean realizarCheckIn(GestorReservas reservas, GestorHabitaciones habitaciones, int idReserva) {
 
         if (reservas == null || habitaciones == null) return false;
 
@@ -24,7 +22,7 @@ public class GestorEmpleados extends GestorGenerico<Empleado> {
 
         Reserva reserva = reservas.buscarReserva(idReserva);
 
-        if (!habitaciones.checkIn(reserva.getHabitacion().getId())) {
+        if (!habitaciones.checkIn(reserva.getId_hab())) {
             return false;
         }
 

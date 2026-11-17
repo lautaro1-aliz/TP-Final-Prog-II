@@ -42,7 +42,6 @@ public class GestionHotel {
         uDAO.insertar(u);
 
         //guarda en memoria
-
         if(u instanceof Pasajero){
             Pasajero p = (Pasajero) u;
             pasajeros.agregar(p);
@@ -93,8 +92,6 @@ public class GestionHotel {
         pasajeros.actualizarPass(u);
     }
 
-
-
     public boolean cancelarReserva(){
         return false;
     }
@@ -102,7 +99,8 @@ public class GestionHotel {
     /// Metodo pensado para listar habitaciones disponibles, con la capacidad solicitadad y a su vez que no se superponga a otra reserva
     public List<Habitacion> listarHabitacionesDisponibles(LocalDate fechaInicio, LocalDate fechaFin, int capacidad) {
 
-        List<Habitacion> disponibles = new ArrayList<>();
+
+        List<Habitacion> disponibles = habitaciones.listarHabitacionesPorEstado(EstadoHabitacion.LIBRE);
 
         ///TODO Excepcion para implementar mas adelante
         if (fechaInicio == null || fechaFin == null || !fechaInicio.isBefore(fechaFin) || capacidad <= 0) {
@@ -113,11 +111,14 @@ public class GestionHotel {
 
             // Comprobamos que esté libre
             if (habitacion.getEstado() != EstadoHabitacion.LIBRE) {
+
                 continue;
+
             }
 
             // Comprobamos que tenga capacidad suficiente
             if (habitacion.getCapacidad() < capacidad) {
+
                 continue;
             }
 
@@ -166,7 +167,7 @@ public class GestionHotel {
             return false;
         }
 
-        Reserva reserva = new Reserva(fechaInicio, fechaFin, habitacion, pasajero);
+        Reserva reserva = new Reserva(fechaInicio, fechaFin, habitacion.getId(), pasajero.getId());
 
         return reservas.agregar(reserva);
     }
@@ -199,7 +200,7 @@ public class GestionHotel {
         }
 
         // Actualizamos los datos
-        reserva.setHabitacion(nuevaHabitacion);
+        reserva.setId_hab(nuevaHabitacion.getId());
         reserva.setFechaInicio(nuevaFechaInicio);
         reserva.setFechaFin(nuevaFechaFin);
 

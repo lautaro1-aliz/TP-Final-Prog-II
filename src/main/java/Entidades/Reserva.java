@@ -13,21 +13,12 @@ public class Reserva implements Identificable {
     private int id;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private Habitacion habitacion;
-    private Usuario usuario;
     private EstadoReserva estado;
-    ///creo que conviene mas almacenaer solo el id del usuario y habitacion
+    private Usuario usuario;
+    private Habitacion habitacion;
     private int id_user;
     private int id_hab;
 
-    public Reserva(int id, LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Usuario usuario) {
-        this.id = id;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.habitacion = habitacion;
-        this.usuario = usuario;
-        this.estado = EstadoReserva.PENDIENTE;
-    }
 
     public Reserva(int id, LocalDate fechaI, LocalDate fechaF, int idUsuario, int idHabitacion, EstadoReserva estado) {
         this.id = id;
@@ -38,9 +29,14 @@ public class Reserva implements Identificable {
         this.estado = estado;
     }
 
-    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Habitacion habitacion, Pasajero pasajero) {
-        
+    public Reserva() {
     }
+
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, int id, int id1) {
+
+    }
+
+
 
     public int getId() {
         return id;

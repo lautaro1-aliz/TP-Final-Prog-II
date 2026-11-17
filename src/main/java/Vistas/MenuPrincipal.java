@@ -37,7 +37,7 @@ public class MenuPrincipal {
                    MenuAdminstrador.mostrar(sistema);
                     break;
                 case EMPLEADO:
-                   MenuRecepcionista.mostrar();
+                   MenuRecepcionista.mostrar(sistema);
                   break;
             case PASAJERO:
                   MenuPasajero.mostrar(sistema, user);

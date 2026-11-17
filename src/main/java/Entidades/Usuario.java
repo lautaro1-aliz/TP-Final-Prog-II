@@ -15,6 +15,7 @@ public abstract class Usuario implements Identificable {
     private String password;
     private String telefono;
     private Rol rol;
+    private int id;
 
     //Constructor
     public Usuario(String DNI, String nombre, String apellido, String telefono, String mail, String password) {
@@ -85,6 +86,14 @@ public abstract class Usuario implements Identificable {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     //Metodos abstractos

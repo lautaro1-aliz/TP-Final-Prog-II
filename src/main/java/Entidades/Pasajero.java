@@ -7,15 +7,21 @@ import java.time.LocalDate;
 public class Pasajero extends Usuario{
 
     private String nacionalidad;
-    private Domicilio domicilio;
+    private String domicilio;
     public Pasajero() {
     }
 
-    public Pasajero(String nombre, String apellido, String DNI, String mail, String telefono, String password, String nacionalidad) {
+    public Pasajero(String nombre, String apellido, String DNI, String mail, String telefono, String password, String nacionalidad,String domicilio) {
         super(DNI, nombre, apellido, telefono, mail, password);
         //todo ver como mapear el domicilio
-    //    this.domicilio = domicilio;
+
+        this.domicilio = domicilio;
         this.nacionalidad = nacionalidad;
+        setRol(Rol.PASAJERO);
+    }
+
+    public Pasajero(String nombre, String apellido, String dni, String mail, String telefono, String password) {
+        super(dni,nombre,apellido,telefono,mail,password);
         setRol(Rol.PASAJERO);
     }
 
@@ -27,11 +33,11 @@ public class Pasajero extends Usuario{
         this.nacionalidad = nacionalidad;
     }
 
-    public Domicilio getDomicilio() {
+    public String getDomicilio() {
         return domicilio;
     }
 
-    public void setDomicilio(Domicilio domicilio) {
+    public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
     }
 

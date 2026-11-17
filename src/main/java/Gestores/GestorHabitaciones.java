@@ -11,7 +11,7 @@ import java.util.List;
 
 public class GestorHabitaciones extends GestorGenerico<Habitacion>{
 
-    final DAO<Habitacion> dao = new HabitacionDAO();
+    private final HabitacionDAO dao = new HabitacionDAO();
 
     public List<Habitacion> listarPorTipo(String tipo) {
         List<Habitacion> resultado = new ArrayList<>();
@@ -51,15 +51,7 @@ public class GestorHabitaciones extends GestorGenerico<Habitacion>{
     }
 
     public List<Habitacion> listarHabitacionesPorEstado(EstadoHabitacion estado) {
-        List<Habitacion> resultado = new ArrayList<>();
-
-        for (Habitacion habitacion : listar()) {
-            if (habitacion.getEstado() == estado) {
-                resultado.add(habitacion);
-            }
-        }
-
-        return resultado;
+        return dao.listarPorEstado(estado);
     }
 
     public boolean modificarPrecioHabitacion(int id, double nuevoPrecio) {
