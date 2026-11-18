@@ -1,0 +1,164 @@
+package Entidades;
+import Enums.EstadoHabitacion;
+import Excepciones.DatosInvalidosException;
+import Interfaces.Identificable;
+
+public class Habitacion implements Identificable{
+    private static int contador = 1;
+    private int id;
+    private int piso;
+    private int capacidad;
+    private EstadoHabitacion estado;
+    private double precioXnoche;
+    private String tipo;
+    private String motivoNoDisponible;
+
+
+    //Constructor
+
+    public Habitacion() {
+    }
+
+    public Habitacion(int piso, int capacidad, double precioXnoche, String tipo) {
+        this.capacidad = capacidad;
+        this.estado = EstadoHabitacion.LIBRE;
+        this.id = contador;
+        contador++;
+        this.piso = piso;
+        this.precioXnoche = precioXnoche;
+        this.tipo = tipo;
+    }
+
+    //constructor para mapear desde BD
+    public Habitacion(int id, int piso, int capacidad, double precioXNoche,
+                      String tipo, String motivoNoDisponible, EstadoHabitacion estado) {
+
+        this.id = id;
+
+        if (id >= contador) {
+            contador = id + 1;
+        }
+
+        this.piso = piso;
+        this.capacidad = capacidad;
+        this.precioXnoche = precioXNoche;
+        this.tipo = tipo;
+
+        this.motivoNoDisponible = motivoNoDisponible;
+        this.estado = estado;
+    }
+
+    //para cargar una habitacion nueva
+    public Habitacion(int piso, int capacidad, double precio, String tipo, String motivo, EstadoHabitacion estado) {
+        this.estado = EstadoHabitacion.LIBRE;
+        this.piso = piso;
+        this.precioXnoche = precio;
+        this.tipo = tipo;
+        this.capacidad = capacidad;
+        this.estado = estado;
+        this.motivoNoDisponible =motivo;
+    }
+
+    //Getter y Setter
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPiso() {
+        return piso;
+    }
+
+    public void setPiso(int piso) {
+        this.piso = piso;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public EstadoHabitacion getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoHabitacion estado) {
+        this.estado = estado;
+    }
+
+    public double getPrecioXnoche() {
+        return precioXnoche;
+    }
+
+    public void setPrecioXnoche(double precioXnoche) {
+        this.precioXnoche = precioXnoche;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getMotivoNoDisponible() {
+        return motivoNoDisponible;
+    }
+
+    public void setMotivoNoDisponible(String motivoNoDisponible) {
+        this.motivoNoDisponible = motivoNoDisponible;
+    }
+
+
+    public double calcularCostoEstadia(int noches){
+
+        if(noches <= 0){
+            throw new DatosInvalidosException("La cantidad de noches no puede ser menor que 0 (recibido: " + noches + ")");
+        }
+        return noches * getPrecioXnoche();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this ==obj) return true;
+
+        if(obj == null || this.getClass()!=obj.getClass())return false;
+
+        //casteo
+        Habitacion otra = (Habitacion) obj;
+
+        // ver despues que criterio usamos para considerar igualdad de habitacion
+        return id == otra.id; ///&& piso == otra.piso && capacidad == otra.capacidad;
+    }   // yo pensaba unicamente comparar los ids pensando como si fueran numeros que a su vez estos sean unicos
+
+    @Override
+    public boolean coincideCon(String criterio) {
+        return String.valueOf(id).equals(criterio);
+    }
+
+    public void marcarNoDisponible(String motivo) {
+        this.estado = EstadoHabitacion.NO_DISPONIBLE;
+        this.motivoNoDisponible = motivo;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Habitacion{" +
+                "capacidad=" + capacidad +
+                ", id=" + id +
+                ", piso=" + piso +
+                ", estado=" + estado +
+                ", precioXnoche=" + precioXnoche +
+                '}';
+    }
+}

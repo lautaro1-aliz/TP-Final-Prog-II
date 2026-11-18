@@ -1,0 +1,72 @@
+package Gestores;
+
+import Entidades.Empleado;
+import Entidades.Pasajero;
+import Entidades.Usuario;
+import Enums.Rol;
+import Interfaces.DAO;
+import dao.UsuarioDAO;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GestorPasajeros extends GestorGenerico<Pasajero> {
+
+    private UsuarioDAO dao = new UsuarioDAO();
+
+
+    public Pasajero buscarPorDni(String dni) {
+
+        ///Validacion momentanea hasta utilizar excepcion
+        if (dni == null) {
+            return null;
+        }
+
+        for (Pasajero p : elementos) {
+            if (p.getDNI().equalsIgnoreCase(dni)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public List<Pasajero> listarPasajeros() {
+        List<Pasajero> pasajeros = new ArrayList<>();
+
+        for (Usuario usuario : dao.listarPorRol(Rol.PASAJERO)) {
+            if (usuario instanceof Pasajero) {
+                pasajeros.add((Pasajero) usuario);
+            }
+        }
+        return pasajeros;
+    }
+
+    public Pasajero buscarPorCredenciales(String email, String password) {
+        Usuario usuario = UsuarioDAO.buscarPorCredenciales(email, password);
+
+        ///casteo momentaneo para evitar que un error si las credenciales son un empleado por ejemplo
+        if (usuario instanceof Pasajero) {
+            return (Pasajero) usuario;
+        }
+
+        return null;
+    }
+
+    public  void guardarBD() throws SQLException {
+        int guardadas= 0;
+        for(Pasajero p: elementos){
+            guardarEnBD(p);
+            guardadas++;
+        }
+        System.out.println("Pasajeros guardados: "+guardadas);
+    }
+
+    public void actualizarPass(Usuario u){
+        dao.actualizar(u);
+    }
+
+    public void guardarEnBD(Pasajero p) throws SQLException {
+        dao.insertar(p);
+    }
+}
